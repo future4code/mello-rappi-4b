@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import {
     InputContainer, 
     Input,
@@ -10,9 +9,10 @@ import {
     CardInfo
 } from './styles'
 
-const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/restaurants"
+
 
 const Filter = (props) => {
+    
     const [name, setName] = useState("")
 
     const handleInputChange = (event) => {

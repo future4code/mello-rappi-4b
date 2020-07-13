@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import react from 'react';
+import { useHistory } from 'react-router-dom';
+
 import {
     RestCard,
     RestLogo,
@@ -11,11 +12,15 @@ import {
 
 const CardRestaurant = (props) => {
     
+    const history = useHistory();
+    const goToRestaurantPage = (id) => {
+        history.push(`/restaurants/${id}`)
+    }
 
     return (
         <div>
             {props.restaurants.map(restaurant => {
-                return (<RestCard>
+                return (<RestCard onClick={() => goToRestaurantPage(restaurant.id)} >
                     <RestLogo src={restaurant.logoUrl} />
                     <CardName>{restaurant.name}</CardName>
                     <CardFooter>

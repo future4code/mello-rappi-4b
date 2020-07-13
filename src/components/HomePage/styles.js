@@ -66,15 +66,15 @@ export const RestLogo = styled.img`
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
 `
+export const CardName = styled.p`
+    color: #e86e5a;
+    margin: 4px 16px 0px 16px;
+`
 export const CardFooter = styled.div`
     display: flex;
     justify-content: space-between;
     margin-right: 16px;
     margin-left: 16px;
-`
-export const CardName = styled.p`
-    color: #e86e5a;
-    margin: 4px 16px 0px 16px;
 `
 export const CardInfo = styled.p`
     font-size: 16px;

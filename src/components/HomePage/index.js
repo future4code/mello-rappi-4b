@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
 import {
@@ -24,8 +24,14 @@ const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/re
 
 const HomePage = () => {
 
+  const [filter, setFilter] = useState(false)
   const [restaurants, setRestaurants] = useState([])
   const [category, setCategory] = useState("")
+
+
+  const setFilterTrue = () => {
+    setFilter(true)
+  }
 
   const getRestaurants = () => {
     const axiosConfig = {
@@ -46,25 +52,21 @@ const HomePage = () => {
     getRestaurants()
   })
 
-  const [filter, setFilter] = useState(false)
-
-  const setFilterTrue = () => {
-    setFilter(true)
-  }
   const setFilterFalse = () => {
     setFilter(false)
   }
 
   const changeCategory = (newCategory) => {
-    if (newCategory !== category) {setCategory(newCategory)}
+    if (newCategory !== category) { setCategory(newCategory) }
     else { setCategory("") }
   }
-  
+
   let filteredList = restaurants
-  if (category !== "") { 
+  if (category !== "") {
     filteredList = filteredList.filter((restaurant) => {
-    return (restaurant.category === category)
-  } )}
+      return (restaurant.category === category)
+    })
+  }
 
 
   return (
@@ -74,13 +76,15 @@ const HomePage = () => {
         <Tittle>Rappi4</Tittle>
       </Header>
 
-      {filter === false ? (<div>
-        <InputContainer>
-          <Input placeholder="Restaurantes" onClick={setFilterTrue} />
-        </InputContainer>
+      {filter === false ?
+        (
+        <div>
+          <InputContainer>
+            <Input placeholder="Restaurantes" onClick={setFilterTrue} />
+          </InputContainer>
 
-        <FilterContainer>
-          {restaurants
+          <FilterContainer>
+            {restaurants
               .filter(
                 (restaurant, index, array) =>
                   array.findIndex(
@@ -90,20 +94,23 @@ const HomePage = () => {
               .map((restaurant) => (
                 <FilterKey value={restaurant.category} onClick={() => changeCategory(restaurant.category)}>{restaurant.category}</FilterKey>
               ))}
-        </FilterContainer>
+          </FilterContainer>
 
+          <RestaurantContainer>
+            <CardRestaurant
+              restaurants={filteredList}
+            />
+          </RestaurantContainer>
+        </div>
+        )
+        :
+        (
         <RestaurantContainer>
-          <CardRestaurant
-          restaurants={filteredList} 
+          <Filter
+            restaurants={restaurants}
           />
         </RestaurantContainer>
-      </div>)
-        :
-        (<RestaurantContainer>
-          <Filter 
-          restaurants={restaurants}
-          />
-        </RestaurantContainer>)
+        )
       }
 
       <Footer>

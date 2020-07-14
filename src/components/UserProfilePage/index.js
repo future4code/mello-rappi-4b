@@ -8,6 +8,7 @@ import NavBar from "./navbar.js";
 
 import {
   Header,
+  MainContainer,
   UserInfoContainer,
   UserInfoWrapper,
   UserInfoCard,
@@ -94,7 +95,7 @@ const UserProfilePage = () => {
   };
 
   return (
-    <>
+    <MainContainer>
       <Header>Meu perfil</Header>
       {user === undefined ? (
         <div
@@ -134,7 +135,7 @@ const UserProfilePage = () => {
           <div style={{ marginTop: 100 }}></div>
         </>
       )}
-    </>
+    </MainContainer>
   );
 };
 

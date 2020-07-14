@@ -5,6 +5,7 @@ import styled from "styled-components";
 import GoBackIcon from "../../images/back.svg";
 import {
   Header,
+  MainContainer,
   UserInfoContainer,
   GoBackIconContainer,
   SubmitButton,
@@ -109,7 +110,7 @@ const UserProfilePage = () => {
   };
 
   return (
-    <>
+    <MainContainer>
       <Header>
         <GoBackIconContainer src={GoBackIcon} onClick={goToProfilePage} />
         Endereço
@@ -163,7 +164,7 @@ const UserProfilePage = () => {
           </form>
         </UserInfoCard>
       </UserInfoContainer>
-    </>
+    </MainContainer>
   );
 };
 

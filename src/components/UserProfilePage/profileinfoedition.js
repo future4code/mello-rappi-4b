@@ -6,6 +6,7 @@ import GoBackIcon from "../../images/back.svg";
 import styled from "styled-components";
 import {
   Header,
+  MainContainer,
   UserInfoContainer,
   GoBackIconContainer,
   InputLabel,
@@ -86,7 +87,7 @@ const ProfileInfoEdition = () => {
   };
 
   return (
-    <>
+    <MainContainer>
       <Header>
         <GoBackIconContainer src={GoBackIcon} onClick={goToProfilePage} />
         Meu perfil
@@ -120,7 +121,7 @@ const ProfileInfoEdition = () => {
           </form>
         </UserInfoCard>
       </UserInfoContainer>
-    </>
+    </MainContainer>
   );
 };
 

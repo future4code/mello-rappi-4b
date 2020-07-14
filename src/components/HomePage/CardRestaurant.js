@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -10,12 +11,14 @@ import {
 } from './styles'
 
 
+import { RestCard, RestLogo, CardFooter, CardName, CardInfo } from "./styles";
+
 const CardRestaurant = (props) => {
-    
-    const history = useHistory();
-    const goToRestaurantPage = (id) => {
-        history.push(`/restaurants/${id}`)
-    }
+  const history = useHistory();
+  const goToRestaurantPage = (id) => {
+    history.push(`/restaurants/${id}`);
+  };
+
 
     return (
         <div>

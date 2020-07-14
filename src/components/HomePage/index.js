@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+
 import axios from "axios";
+
 import {
   Feed,
   Header,
@@ -8,6 +10,7 @@ import {
   FilterContainer,
   FilterKey,
   RestaurantContainer,
+
   Footer,
 } from "./styles";
 import TextField from "@material-ui/core/TextField";
@@ -56,12 +59,14 @@ const HomePage = () => {
     filteredList = filteredList.filter((restaurant) => {
       return restaurant.category === category;
     });
+
   }
   return (
     <Feed>
       <Header>
         <Tittle>Rappi4</Tittle>
       </Header>
+
       {filter === false ? (
         <div>
           <InputContainer>
@@ -106,13 +111,15 @@ const HomePage = () => {
           <Filter restaurants={restaurants} />
         </RestaurantContainer>
       )}
-      <Footer>
+    <Footer>
         <img src={HomePageIcon} onClick={setFilterFalse}></img>
         <img src={CartIcon}></img>
         <img src={AvatarIcon}></img>
       </Footer>
     </Feed>
   );
+  )
 };
-
 export default HomePage;
+
+

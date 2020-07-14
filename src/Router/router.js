@@ -7,6 +7,8 @@ import SignUpPage from "../components/SignUpPage";
 import RestaurantPage from "../components/RestaurantPage";
 import HomePage from "../components/HomePage";
 import UserProfilePage from "../components/UserProfilePage";
+import UserProfileAddressEditPage from "../components/UserProfilePage/addressedition";
+import UserProfileEditPage from "../components/UserProfilePage/profileinfoedition";
 
 const Router = () => {
   return (
@@ -26,6 +28,12 @@ const Router = () => {
         </Route>
         <Route exact path="/restaurants/:id">
           <RestaurantPage />
+        </Route>
+        <Route exact path="/profile/edit-address">
+          <UserProfileAddressEditPage />
+        </Route>
+        <Route exact path="/profile/edit">
+          <UserProfileEditPage />
         </Route>
 
         <Route path="*">

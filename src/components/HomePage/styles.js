@@ -18,12 +18,15 @@ export const Tittle = styled.p`
   margin-top: 43px;
   letter-spacing: -0.39px;
   text-align: center;
-  color: #e86e5a;
+  color: var(--black);
 `;
 export const InputContainer = styled.div`
+  width: 328px;
+  height: 56px;
   margin-top: 8px;
   display: flex;
-  justify-content: space-around;
+  margin-left: 16px;
+  font-family: Roboto;
 `;
 export const Input = styled.input`
   width: 328px;
@@ -32,6 +35,7 @@ export const Input = styled.input`
   border: solid 1px #b8b8b8;
   font-family: Roboto;
   font-size: 16px;
+  margin-bottom: 8px;
 `;
 export const FilterContainer = styled.div`
   margin-top: 8px;
@@ -92,4 +96,8 @@ export const Footer = styled.div`
   background-color: white;
   display: flex;
   justify-content: space-around;
+`;
+export const FilterResponse = styled.div`
+  margin-top: 16px;
+  margin-left: 16px;
 `;

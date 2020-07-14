@@ -1,0 +1,211 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+import GoBackIcon from "../../images/back.svg";
+import styled from "styled-components";
+
+const Header = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 32px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.25);
+  background-color: var(--white);
+`;
+
+const UserInfoContainer = styled.article`
+  width: 360px;
+  height: 120px;
+  margin: 0 auto;
+`;
+
+const UserInfoCard = styled.section`
+  width: 328px;
+  margin: 10px auto 0 auto;
+  letter-spacing: -0.39px;
+  line-height: 25px;
+  margin-bottom: 10px;
+`;
+
+const UserInput = styled.input`
+  width: 316px;
+  height: 56px;
+  border-radius: 4px;
+  border: solid 1px #b8b8b8;
+  margin-bottom: 24px;
+  padding-left: 12px;
+
+  &::placeholder {
+    font-size: 16px;
+    color: #d0d0d0;
+  }
+`;
+
+const SubmitButton = styled.button`
+  border: none;
+  width: 328px;
+  height: 42px;
+  border-radius: 2px;
+  background-color: #e86e5a;
+  font-size: 16px;
+`;
+
+const InputLabel = styled.label`
+  position: absolute;
+  margin-top: -12px;
+  margin-left: 14px;
+  background-color: white;
+  font-size: 12px;
+  color: #b8b8b8;
+`;
+
+const GoBackIconContainer = styled.img`
+  position: absolute;
+  top: 6px;
+  left: 16px;
+`;
+
+const axiosConfig = {
+  headers: {
+    auth:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InBjNXFTdlpoM0U1cFFRSE1qcVVEIiwibmFtZSI6IkZhYnLDrWNpbyBSb2RyaWd1ZXMiLCJlbWFpbCI6ImVhcnRoYm9ybnNoZXBhcmRAbGFiZW51LmNvbSIsImNwZiI6IjQ0NC4xMTEuMTExLTExIiwiaGFzQWRkcmVzcyI6dHJ1ZSwiYWRkcmVzcyI6IkF2IDkgZGUgSnVsaG8sIDI4OCwgNzEgLSBKYXJkaW0gQ29uY2Vpw6fDo28iLCJpYXQiOjE1OTQ2NjgyOTJ9.KktOLR9lOwxi_VA-w2TwEwuXpKccg1dkV100ozdfpZw",
+  },
+};
+
+const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4B";
+
+const UserProfilePage = () => {
+  const history = useHistory();
+  const [currentInfo, setCurrentInfo] = useState(undefined);
+  const [firstAttempt, setFirstAttempt] = useState(false);
+  const [street, setStreet] = useState();
+  const [number, setNumber] = useState();
+  const [neighbourhood, setNeighbourhood] = useState();
+  const [city, setCity] = useState();
+  const [state, setState] = useState();
+  const [complement, setComplement] = useState();
+
+  useEffect(() => {
+    getFullAdress();
+
+    if (currentInfo !== undefined && firstAttempt === false) {
+      setFirstAttempt(true);
+      setStreet(currentInfo.street);
+      setNumber(currentInfo.number);
+      setNeighbourhood(currentInfo.neighbourhood);
+      setCity(currentInfo.city);
+      setState(currentInfo.state);
+      setComplement(currentInfo.complement);
+    }
+  }, [currentInfo, firstAttempt]);
+
+  const getFullAdress = () => {
+    axios.get(`${baseUrl}/profile/address`, axiosConfig).then((response) => {
+      setCurrentInfo(response.data.address);
+    });
+  };
+
+  const goToProfilePage = () => {
+    history.push("/profile");
+  };
+
+  const editAddress = () => {
+    const body = {
+      street: street,
+      number: number,
+      complement: complement,
+      neighbourhood: neighbourhood,
+      city: city,
+      state: state,
+    };
+
+    axios
+      .put(`${baseUrl}/address`, body, axiosConfig)
+      .then(() => {
+        alert("Endereço atualizado/cadastrado com sucesso!");
+      })
+      .catch((e) => {
+        alert(e);
+      });
+  };
+
+  const handleUpdateStreet = (event) => {
+    setStreet(event.target.value);
+  };
+
+  const handleUpdateNumber = (event) => {
+    setNumber(event.target.value);
+  };
+
+  const handleUpdateComplement = (event) => {
+    setComplement(event.target.value);
+  };
+
+  const handleUpdateNeighbourhood = (event) => {
+    setNeighbourhood(event.target.value);
+  };
+
+  const handleUpdateCity = (event) => {
+    setCity(event.target.value);
+  };
+
+  const handleUpdateState = (event) => {
+    setState(event.target.value);
+  };
+
+  return (
+    <>
+      <Header>
+        <GoBackIconContainer src={GoBackIcon} onClick={goToProfilePage} />
+        Endereço
+      </Header>
+
+      <UserInfoContainer>
+        <UserInfoCard>
+          <InputLabel>Logradouro* </InputLabel>
+          <UserInput
+            placeholder="Av. Nove de Julho"
+            value={street}
+            onChange={handleUpdateStreet}
+          ></UserInput>
+          <InputLabel>Número* </InputLabel>
+          <UserInput
+            placeholder="415"
+            value={number}
+            onChange={handleUpdateNumber}
+          ></UserInput>
+          <InputLabel>Complemento</InputLabel>
+          <UserInput
+            placeholder="Apto./Bloco"
+            value={complement}
+            onChange={handleUpdateComplement}
+          ></UserInput>
+          <InputLabel>Bairro* </InputLabel>
+          <UserInput
+            placeholder="Jardim das Palmeiras"
+            value={neighbourhood}
+            onChange={handleUpdateNeighbourhood}
+          ></UserInput>
+          <InputLabel>Cidade* </InputLabel>
+          <UserInput
+            placeholder="São Paulo"
+            value={city}
+            onChange={handleUpdateCity}
+          ></UserInput>
+          <InputLabel>Estado* </InputLabel>
+          <UserInput
+            placeholder="SP"
+            value={state}
+            onChange={handleUpdateState}
+          ></UserInput>
+          <SubmitButton onClick={editAddress}>Salvar</SubmitButton>
+        </UserInfoCard>
+      </UserInfoContainer>
+    </>
+  );
+};
+
+export default UserProfilePage;

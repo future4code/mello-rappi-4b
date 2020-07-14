@@ -20,7 +20,7 @@ const CardRestaurant = (props) => {
     return (
         <div>
             {props.restaurants.map(restaurant => {
-                return (<RestCard onClick={() => goToRestaurantPage(restaurant.id)} >
+                return (<RestCard onClick={() => goToRestaurantPage(restaurant.id)} key={restaurant.id} >
                     <RestLogo src={restaurant.logoUrl} />
                     <CardName>{restaurant.name}</CardName>
                     <CardFooter>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import {
-    InputContainer, 
-    Input,
+    InputContainer,
+    Tittle,
+    FilterResponse,
     RestCard,
     RestLogo,
     CardFooter,
@@ -9,7 +10,9 @@ import {
     CardInfo
 } from './styles'
 
-
+import TextField from '@material-ui/core/TextField';
+import SearchIcon from '@material-ui/icons/Search';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 const Filter = (props) => {
     
@@ -28,9 +31,21 @@ const Filter = (props) => {
     return (
         <div>
             <InputContainer>
-                <Input placeholder="Restaurantes" onChange={handleInputChange} />
+            <TextField
+              variant="outlined" 
+              placeholder="Restaurantes"
+              fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+            onChange={handleInputChange} />
             </InputContainer>
-            {name === "" ? (<p>Digite algo no campo de pesquisa</p>) : 
+            <FilterResponse>
+            {name === "" ? (<Tittle>Digite algo no campo de pesquisa</Tittle>) : 
             (orderedList.length !== 0 ? (
             orderedList.map(restaurant => {
                 return (
@@ -43,8 +58,9 @@ const Filter = (props) => {
                         </CardFooter>
                     </RestCard>
                 )
-            })) : (<p>Nenhuma correspondencia :( </p>)
+            })) : (<Tittle>Nenhuma correspondencia :( </Tittle>)
             )}
+            </FilterResponse>
         </div>
     )
 }

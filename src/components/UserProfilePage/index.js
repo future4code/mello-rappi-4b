@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { useRequestData } from "../../hooks/useRequestData";
 import { CircularProgress } from "@material-ui/core";
 import axios from "axios";
 import EditIcon from "../../images/edit.svg";
@@ -32,35 +33,12 @@ const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4B";
 
 const UserProfilePage = () => {
   const [user, setUser] = useState();
+  const [previousOrders, setPreviousOrders] = useState([]);
 
   const history = useHistory();
-
-  const [previousOrders, setPreviousOrders] = useState([
-    {
-      name: "Bullguer Vila Madalena",
-      date: "23 Outubro 2019",
-      total: 67.0,
-    },
-    {
-      name: "Vinil Burguer Butantã",
-      date: "30 Setembro 2019",
-      total: 89.0,
-    },
-    {
-      name: "Bullguer Vila Madalena",
-      date: "10 Setembro 2019",
-      total: 77.5,
-    },
-    {
-      name: "Papa Pizza",
-      date: "6 Setembro 2019",
-      total: 29.9,
-    },
-  ]);
-
   useEffect(() => {
     getProfile();
-    getHistory();
+    getOrderHistory();
   }, [user]);
 
   const getProfile = () => {
@@ -74,10 +52,12 @@ const UserProfilePage = () => {
       });
   };
 
-  const getHistory = () => {
+  const getOrderHistory = () => {
     axios
       .get(`${baseUrl}/orders/history`, axiosConfig)
-      .then((response) => {})
+      .then((response) => {
+        setPreviousOrders(response.data.orders);
+      })
       .catch((e) => {
         console.log(e);
       });

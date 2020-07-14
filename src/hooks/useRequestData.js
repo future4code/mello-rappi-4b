@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export function useRequestData(url, config, initialState) {
+export function useRequestData(url, initialState) {
   const [data, setData] = useState(initialState);
 
   useEffect(() => {
-    axios.get(url, config).then((response) => {
+    axios.get(url).then((response) => {
       setData(response.data);
     });
-  }, [config, url]);
+  }, [url]);
 
   return data;
 }

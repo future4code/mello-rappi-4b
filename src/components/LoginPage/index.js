@@ -1,22 +1,26 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-//import Logo from "../../logo-future-eats@2x.png";
 
-const PageConteiner = styled.div `
-display: flex;
-flex-direction: column;
-align-items: center;
-`
-
-//xport const ImgBox = styled.div`
-//align-items: center;
-//justify-items: center;
-//`;
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 
 
-const BaseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4b/login"
+import {
+  PageConteiner,
+  Logo,
+  Tittle,
+  InputContainer,
+  Input,
+  Button
+} from './styles'
+
+
+import LogoImage from './logo.svg';
+
+
+
+const BaseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/login"
 
 
 const LoginPage = () => {
@@ -35,7 +39,7 @@ const LoginPage = () => {
     try {
       const response = await axios.post(`${BaseUrl}`, body);
       localStorage.setItem("token", response.data.token);
-      history.push("/restaurants/:id");
+      history.push("/");
     } catch (e) {
       alert("Falha no login");
     }
@@ -46,31 +50,49 @@ const LoginPage = () => {
   };
 
 
+
   return (
-  <PageConteiner>
-    <h1>LOGIN PAGE</h1>
-    <div>Entrar</div>
-    <form>
-      <label htmlFor="email">E-mail</label>
-      <input
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        id="email"
-        type="email"
-        required
-      />
-      <label htmlFor="password">Senha</label>
-      <input
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        id="password"
-        type="password"
-        required
-     />
-      <button onClick={handleLogin}>Entrar</button>
-    </form>
-    <button onClick={goToSignUpPage}>Cadastre-se!</button>
-  </PageConteiner>
+    <PageConteiner>
+      <Logo src={LogoImage} />
+      <Tittle>Entrar</Tittle>
+      <InputContainer>
+        <TextField
+          label="E-mail"
+          style={{ margin: 8 }}
+          placeholder="email@email.com"
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          id="email"
+          type="email"
+          required
+          fullWidth
+        />
+        <TextField
+          label="Senha"
+          style={{ margin: 8 }}
+          placeholder="Minimo 6 caracteres"
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          id="password"
+          type="password"
+          required
+          fullWidth
+        />
+
+        <Button onClick={handleLogin}><b>Entrar</b></Button>
+      </InputContainer>
+      <p onClick={goToSignUpPage}>Não tem cadastro? Clique aqui</p>
+    </PageConteiner>
   )
 
 };

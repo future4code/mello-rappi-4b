@@ -13,7 +13,6 @@ export const Logo = styled.img`
     margin-bottom: 28px;
 `
 export const Tittle = styled.div`
-    
     margin-bottom: 8px;
 `
 export const InputContainer = styled.div`

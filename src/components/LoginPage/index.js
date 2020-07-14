@@ -20,7 +20,7 @@ import LogoImage from './logo.svg';
 
 
 
-const BaseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4b/login"
+const BaseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/login"
 
 
 const LoginPage = () => {
@@ -39,7 +39,7 @@ const LoginPage = () => {
     try {
       const response = await axios.post(`${BaseUrl}`, body);
       localStorage.setItem("token", response.data.token);
-      history.push("/restaurants/:id");
+      history.push("/");
     } catch (e) {
       alert("Falha no login");
     }

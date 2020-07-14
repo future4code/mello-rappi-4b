@@ -23,16 +23,22 @@ const NavigationButton = styled.button`
 `;
 
 const NavBar = () => {
+  const history = useHistory();
+
+  const goToHomePage = () => {
+    history.push("/");
+  };
+
   return (
     <NavigationBar>
       <NavigationButton>
-        <img src={ShoppingCart} />
+        <img src={Homepage} alt="pagina-principal" onClick={goToHomePage} />
       </NavigationButton>
       <NavigationButton>
-        <img src={Homepage} />
+        <img src={ShoppingCart} alt="carrinho-de-compras" />
       </NavigationButton>
       <NavigationButton>
-        <img src={Avatar} />
+        <img src={Avatar} alt="avatar" />
       </NavigationButton>
     </NavigationBar>
   );

@@ -1,26 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import GoBackIcon from "../../images/back.svg";
 import styled from "styled-components";
-
-const Header = styled.header`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 32px;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0.5px 0 0 rgba(0, 0, 0, 0.25);
-  background-color: var(--white);
-`;
-
-const UserInfoContainer = styled.article`
-  width: 360px;
-  height: 120px;
-  margin: 0 auto;
-`;
+import GoBackIcon from "../../images/back.svg";
+import {
+  Header,
+  MainContainer,
+  UserInfoContainer,
+  GoBackIconContainer,
+  SubmitButton,
+  UserInput,
+  InputLabel,
+} from "./styles";
 
 const UserInfoCard = styled.section`
   width: 328px;
@@ -28,44 +19,6 @@ const UserInfoCard = styled.section`
   letter-spacing: -0.39px;
   line-height: 25px;
   margin-bottom: 10px;
-`;
-
-const UserInput = styled.input`
-  width: 316px;
-  height: 56px;
-  border-radius: 4px;
-  border: solid 1px #b8b8b8;
-  margin-bottom: 24px;
-  padding-left: 12px;
-
-  &::placeholder {
-    font-size: 16px;
-    color: #d0d0d0;
-  }
-`;
-
-const SubmitButton = styled.button`
-  border: none;
-  width: 328px;
-  height: 42px;
-  border-radius: 2px;
-  background-color: #e86e5a;
-  font-size: 16px;
-`;
-
-const InputLabel = styled.label`
-  position: absolute;
-  margin-top: -12px;
-  margin-left: 14px;
-  background-color: white;
-  font-size: 12px;
-  color: #b8b8b8;
-`;
-
-const GoBackIconContainer = styled.img`
-  position: absolute;
-  top: 6px;
-  left: 16px;
 `;
 
 const axiosConfig = {
@@ -157,7 +110,7 @@ const UserProfilePage = () => {
   };
 
   return (
-    <>
+    <MainContainer>
       <Header>
         <GoBackIconContainer src={GoBackIcon} onClick={goToProfilePage} />
         Endereço
@@ -165,46 +118,53 @@ const UserProfilePage = () => {
 
       <UserInfoContainer>
         <UserInfoCard>
-          <InputLabel>Logradouro* </InputLabel>
-          <UserInput
-            placeholder="Av. Nove de Julho"
-            value={street}
-            onChange={handleUpdateStreet}
-          ></UserInput>
-          <InputLabel>Número* </InputLabel>
-          <UserInput
-            placeholder="415"
-            value={number}
-            onChange={handleUpdateNumber}
-          ></UserInput>
-          <InputLabel>Complemento</InputLabel>
-          <UserInput
-            placeholder="Apto./Bloco"
-            value={complement}
-            onChange={handleUpdateComplement}
-          ></UserInput>
-          <InputLabel>Bairro* </InputLabel>
-          <UserInput
-            placeholder="Jardim das Palmeiras"
-            value={neighbourhood}
-            onChange={handleUpdateNeighbourhood}
-          ></UserInput>
-          <InputLabel>Cidade* </InputLabel>
-          <UserInput
-            placeholder="São Paulo"
-            value={city}
-            onChange={handleUpdateCity}
-          ></UserInput>
-          <InputLabel>Estado* </InputLabel>
-          <UserInput
-            placeholder="SP"
-            value={state}
-            onChange={handleUpdateState}
-          ></UserInput>
-          <SubmitButton onClick={editAddress}>Salvar</SubmitButton>
+          <form>
+            <InputLabel>Logradouro* </InputLabel>
+            <UserInput
+              placeholder="Av. Nove de Julho"
+              value={street}
+              onChange={handleUpdateStreet}
+              required
+            ></UserInput>
+            <InputLabel>Número* </InputLabel>
+            <UserInput
+              placeholder="415"
+              value={number}
+              onChange={handleUpdateNumber}
+              required
+            ></UserInput>
+            <InputLabel>Complemento</InputLabel>
+            <UserInput
+              placeholder="Apto./Bloco"
+              value={complement}
+              onChange={handleUpdateComplement}
+            ></UserInput>
+            <InputLabel>Bairro* </InputLabel>
+            <UserInput
+              placeholder="Jardim das Palmeiras"
+              value={neighbourhood}
+              onChange={handleUpdateNeighbourhood}
+              required
+            ></UserInput>
+            <InputLabel>Cidade* </InputLabel>
+            <UserInput
+              placeholder="São Paulo"
+              value={city}
+              onChange={handleUpdateCity}
+              required
+            ></UserInput>
+            <InputLabel>Estado* </InputLabel>
+            <UserInput
+              placeholder="SP"
+              value={state}
+              onChange={handleUpdateState}
+              required
+            ></UserInput>
+            <SubmitButton onClick={editAddress}>Salvar</SubmitButton>
+          </form>
         </UserInfoCard>
       </UserInfoContainer>
-    </>
+    </MainContainer>
   );
 };
 

@@ -12,6 +12,10 @@ export const Header = styled.header`
   background-color: var(--white);
 `;
 
+export const MainContainer = styled.div`
+  font-family: "Roboto", sans-serif;
+`;
+
 export const UserInfoContainer = styled.article`
   width: 100%;
   margin: 0 auto;

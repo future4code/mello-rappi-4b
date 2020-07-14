@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-
-
 import {
   PageConteiner,
   Logo,
@@ -14,14 +11,8 @@ import {
   Input,
   Button
 } from './styles'
-
-
 import LogoImage from './logo.svg';
-
-
-
 const BaseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/login"
-
 
 const LoginPage = () => {
   let history = useHistory();
@@ -48,9 +39,6 @@ const LoginPage = () => {
   const goToSignUpPage = () => {
     history.push("/signup");
   };
-
-
-
   return (
     <PageConteiner>
       <Logo src={LogoImage} />
@@ -94,8 +82,6 @@ const LoginPage = () => {
       <p onClick={goToSignUpPage}>Não tem cadastro? Clique aqui</p>
     </PageConteiner>
   )
-
 };
 
 export default LoginPage;
-

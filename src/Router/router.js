@@ -9,6 +9,7 @@ import HomePage from "../components/HomePage";
 import UserProfilePage from "../components/UserProfilePage";
 import UserProfileAddressEditPage from "../components/UserProfilePage/addressedition";
 import UserProfileEditPage from "../components/UserProfilePage/profileinfoedition";
+import Cart from "../components/Cart/index";
 
 const Router = () => {
   return (
@@ -34,6 +35,9 @@ const Router = () => {
         </Route>
         <Route exact path="/profile/edit">
           <UserProfileEditPage />
+        </Route>
+        <Route exact path="/cart">
+          <Cart />
         </Route>
 
         <Route path="*">

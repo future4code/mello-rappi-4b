@@ -29,13 +29,17 @@ const NavBar = () => {
     history.push("/");
   };
 
+  const goToCart = () => {
+    history.push("/cart");
+  };
+
   return (
     <NavigationBar>
       <NavigationButton>
         <img src={Homepage} alt="pagina-principal" onClick={goToHomePage} />
       </NavigationButton>
       <NavigationButton>
-        <img src={ShoppingCart} alt="carrinho-de-compras" />
+        <img src={ShoppingCart} alt="carrinho-de-compras" onClick={goToCart} />
       </NavigationButton>
       <NavigationButton>
         <img src={Avatar} alt="avatar" />

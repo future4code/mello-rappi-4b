@@ -1,7 +1,16 @@
 import React, { useState} from "react";
 import { useHistory } from "react-router-dom";
+
 import TextField from '@material-ui/core/TextField';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import IconButton from '@material-ui/core/IconButton';
+
 import axios from "axios";
+
 import {
   PageConteiner,
   Logo,
@@ -9,6 +18,7 @@ import {
   InputContainer,
   Button
 } from "./styles";
+
 import LogoImage from "./logo.svg";
 
 
@@ -17,9 +27,14 @@ const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4B"
 function SignUpPage() {
   let history = useHistory();
   const [name, setName] = useState("");
-  const [email, setEmail] = useState(""); //como faço pra garantir que só haja um usuário com o cpf e email?
+  const [email, setEmail] = useState(""); 
   const [cpf, setCpf] = useState("");
-  const [password, setPassword] = useState(""); //Posso usar algum dos nossos hooks?
+  const [password, setPassword] = useState(""); 
+  const [ showPassword , setShowPassword ] = useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword( !showPassword );
+  };
 
   const handleSignUp = async (event) => {
     event.preventDefault();
@@ -35,7 +50,7 @@ function SignUpPage() {
     try {
       const response = await axios.post(`${baseUrl}/signup`, body);
       localStorage.setItem("token", response.data.token);
-      history.push("/profile"); //isso já dará certo? Vai pra página de endereço?
+      history.push("/profile/edit-address")
     } catch (e) {
       alert("Falha no cadastro");
     }
@@ -95,8 +110,12 @@ function SignUpPage() {
           required
           fullWidth
         />
-        <TextField
-          label="Senha"
+        <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+        <OutlinedInput
+          id="standard-adornment-password"
+          type={showPassword ? 'text' : 'password'}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           style={{ margin: 8 }}
           placeholder="Minimo 6 caracteres"
           margin="normal"
@@ -104,28 +123,44 @@ function SignUpPage() {
             shrink: true,
           }}
           variant="outlined"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          id="password"
-          type="password"
           required
           fullWidth
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+              >
+                {showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          }
         />
-        <TextField
-          label="Senha"
+        <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+        <OutlinedInput
+          id="standard-adornment-password"
+          type={showPassword ? 'text' : 'password'}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           style={{ margin: 8 }}
-          placeholder="Confirme a senha anterior"
+          placeholder="Minimo 6 caracteres"
           margin="normal"
           InputLabelProps={{
             shrink: true,
           }}
           variant="outlined"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          id="password"
-          type="password"
           required
           fullWidth
+          endAdornment={
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+              >
+                {showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          }
         />
         <Button onClick={handleSignUp}><b>Criar</b></Button>
       </InputContainer>

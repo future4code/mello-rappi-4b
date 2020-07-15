@@ -2,7 +2,7 @@ import React, { useState} from "react";
 import { useHistory } from "react-router-dom";
 
 import TextField from '@material-ui/core/TextField';
-import InputLabel from '@material-ui/core/InputLabel';
+//import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Visibility from '@material-ui/icons/Visibility';
@@ -30,16 +30,25 @@ function SignUpPage() {
   const [email, setEmail] = useState(""); 
   const [cpf, setCpf] = useState("");
   const [password, setPassword] = useState(""); 
+  const [confPassword, setConfPassword] = useState("");
   const [ showPassword , setShowPassword ] = useState(false);
 
   const handleClickShowPassword = () => {
     setShowPassword( !showPassword );
   };
 
+  /*
+  if (typeof input["password"] !== "undefined" && typeof input["confirm_password"] !== "undefined") {
+    if (input["password"] != input["confirm_password"]) {
+       isValid = false;
+       errors["password"] = "Passwords don't match.";
+    }
+  }
+  */
+
   const handleSignUp = async (event) => {
     event.preventDefault();
 
-//como faço pra confirmar a senha, para preencher os dois campos de senha?
     const body = {
       name: name,
       email: email,
@@ -47,13 +56,16 @@ function SignUpPage() {
       password: password, 
     };
 
-    try {
-      const response = await axios.post(`${baseUrl}/signup`, body);
-      localStorage.setItem("token", response.data.token);
-      history.push("/profile/edit-address")
-    } catch (e) {
-      alert("Falha no cadastro");
-    }
+    if ( password === confPassword) {
+      try {
+        const response = await axios.post(`${baseUrl}/signup`, body);
+        localStorage.setItem("token", response.data.token);
+        history.push("/profile/edit-address")
+      } catch (e) {
+        alert("Falha no cadastro");
+      }
+    } else { alert("senhas não conferem")}
+ 
   };
 
   return (
@@ -110,8 +122,9 @@ function SignUpPage() {
           required
           fullWidth
         />
-        <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+        
         <OutlinedInput
+          label="Senha"
           id="standard-adornment-password"
           type={showPassword ? 'text' : 'password'}
           value={password}
@@ -136,14 +149,15 @@ function SignUpPage() {
             </InputAdornment>
           }
         />
-        <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+        
         <OutlinedInput
+          label="Confirmar"
           id="standard-adornment-password"
           type={showPassword ? 'text' : 'password'}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={confPassword}
+          onChange={(e) => setConfPassword(e.target.value)}
           style={{ margin: 8 }}
-          placeholder="Minimo 6 caracteres"
+          placeholder="Confirme a senha anterior"
           margin="normal"
           InputLabelProps={{
             shrink: true,
@@ -170,3 +184,13 @@ function SignUpPage() {
 
 export default SignUpPage;
 
+/*
+<TextField
+          label="Senha"
+          id="outlined-start-adornment"
+          InputProps={{
+            startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
+          }}
+          variant="outlined"
+        />
+        */

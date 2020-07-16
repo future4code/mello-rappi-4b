@@ -108,9 +108,9 @@ const Cart = () => {
     setCart(newCart);
   };
 
-  console.log(cart);
-  console.log(profile);
-  console.log(restaurantDetail);
+  //console.log(cart);
+  //console.log(profile);
+  //console.log(restaurantDetail);
 
   const listProducts = restaurantProducts.map((product) => {
     return (
@@ -150,7 +150,7 @@ const Cart = () => {
 
   // })
 
-  console.log(novoCarrinho);
+  //console.log(novoCarrinho);
 
   const carrinhoRenderizado = novoCarrinho.map((produto) => (
     <Estilo01>

@@ -4,6 +4,7 @@ export const Feed = styled.div`
   width: 360px;
   height: 640px;
   font-family: Roboto;
+  margin-left: 8px;
 `;
 export const Header = styled.div`
   width: 360px;
@@ -56,6 +57,9 @@ export const RestaurantContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+export const CardContainer = styled.div`
+  margin-bottom: 50px;
 `;
 export const RestCard = styled.div`
   width: 328px;

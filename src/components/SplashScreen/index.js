@@ -25,8 +25,9 @@ animation-delay: 3s;
 export const Logo = styled.img`
     width: 208px;
     height: 116px;
-    margin-top: 88px;
-    margin-bottom: 28px;
+    margin-left: 80px;
+    margin-top: 190px;
+    
 `
 
 const SplashScreen = () => {

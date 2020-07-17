@@ -11,6 +11,10 @@ import {
   FilterKey,
   RestaurantContainer,
   Footer,
+  ClockIcon,
+  CartCard,
+  CartCardText1,
+  CartCardText2
 } from "./styles";
 import TextField from "@material-ui/core/TextField";
 import SearchIcon from "@material-ui/icons/Search";
@@ -18,6 +22,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import HomePageIcon from "./images/homepage.svg";
 import CartIcon from "./images/shopping-cart.svg";
 import AvatarIcon from "./images/avatar.svg";
+import Clock from "./images/clock.svg";
 import CardRestaurant from "./CardRestaurant";
 import Filter from "./FilteredPage";
 
@@ -28,18 +33,18 @@ const HomePage = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [category, setCategory] = useState("");
   const [token, setToken] = useState(null);
-  const history = useHistory ()
-  
+  const history = useHistory()
+
 
   useEffect(() => {
     const token = window.localStorage.getItem('token')
     setToken(token)
-    if ( !token ) {
+    if (!token) {
       history.push('/login')
     } else {
       getRestaurants();
     }
-  }, );
+  });
 
 
   const setFilterTrue = () => {
@@ -88,7 +93,7 @@ const HomePage = () => {
   const goToProfile = () => {
     history.push('./profile')
   };
-
+  const RestauranteInfo = window.localStorage.getItem(RestauranteInfo)
   return (
     <Feed>
       <Header>
@@ -139,6 +144,13 @@ const HomePage = () => {
             <Filter restaurants={restaurants} />
           </RestaurantContainer>
         )}
+        <CartCard>
+          <img src={Clock} />
+          <CartCardText1>Pedido em andamento</CartCardText1>
+          <CartCardText2>{RestauranteInfo.name} </CartCardText2>
+          {/* RestauranteInfo.name
+          RestauranteInfo.totalPrice */}
+        </CartCard>
       <Footer>
         <img src={HomePageIcon} onClick={setFilterFalse}></img>
         <img src={CartIcon} onClick={goToCart}></img>

@@ -4,7 +4,6 @@ export const RestaurantContainer = styled.div`
   width: 360px;
   height: 640px;
   font-family: Roboto;
-  /* background-color: pink; */
   display: flex;
   flex-direction: column;
 `;
@@ -19,7 +18,7 @@ export const Header = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
-//////RESRAURANT DETAILS
+
 export const RestLogo = styled.img`
   width: 328px;
   height: 120px;
@@ -41,7 +40,6 @@ export const DetailsContainer = styled.div`
   height: 180px;
   display: flex;
   flex-direction: column;
-  /* flex-wrap: wrap; */
   margin-left: 16px;
 `;
 export const Name = styled.p`
@@ -54,7 +52,6 @@ export const MainText = styled.p`
   font-size: 16px;
   letter-spacing: -0.39px;
   color: #b8b8b8;
-
   margin: 3px;
 `;
 
@@ -76,7 +73,6 @@ export const CategoryTitle = styled.h5`
   margin-left: 16px;
 `;
 
-////////PRODUCTS
 export const ProductCard = styled.div`
   width: 328px;
   height: 112px;
@@ -87,11 +83,13 @@ export const ProductCard = styled.div`
   position: relative;
   display: flex;
 `;
+export const ProductsContainer = styled.div`
+  margin-bottom: 50px;
+`
 
 export const ProductImg = styled.img`
   width: 97px;
   height: 112px;
-  object-fit: contain;
   border-bottom-left-radius: 8px;
   border-top-left-radius: 8px;
 `;
@@ -148,12 +146,44 @@ export const AddButton = styled.button`
   width: 90px;
   height: 31px;
 
-  border: solid 1px var(--black);
+  border: solid 1px #b8b8b8;
   position: absolute;
   bottom: 0px;
   right: 0;
   background-color: white;
+
+  border-bottom-right-radius: 8px;
+  border-top-left-radius: 8px;
+
 `;
+export const RemoveButton = styled.button`
+  width: 90px;
+  height: 31px;
+  
+  border: solid 1px #e86e5a;
+  position: absolute;
+  bottom: 0px;
+  right: 0;
+  background-color: white;
+
+  border-bottom-right-radius: 8px;
+  border-top-left-radius: 8px;
+  color: #e02020;
+  
+`;
+export const Number = styled.button`
+  width: 33px;
+  height: 33px;
+  border: solid 1px #e02020;
+  position: absolute;
+  top: 0px;
+  right: 0;
+  background-color: white;
+
+  border-bottom-left-radius: 8px;
+  border-top-right-radius: 8px;
+`;
+
 export const Footer = styled.div`
   position: fixed;
   left: 0;

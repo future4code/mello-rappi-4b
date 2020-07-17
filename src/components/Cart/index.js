@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
+import NavBar from "./navbar.js";
 
 const Estilo01 = styled.div`
   display: flex;
+  flex-direction: column;
+`;
+
+const Estilo02 = styled.div`
+  margin-bottom: 70px;
+`;
+
+const ImgProduct = styled.img`
+  width: 97px;
+  height: 112.6px;
 `;
 
 const Cart = () => {
@@ -11,16 +23,19 @@ const Cart = () => {
   const [profile, setProfile] = useState("");
   const [restaurantDetail, setRestaurantDetail] = useState("");
   const [restaurantProducts, setRestaurantProducts] = useState([]);
-  const [quantidade, setQuantidade] = useState(1);
+  const [quantidade, setQuantidade] = useState(2);
   const novoCarrinho = [];
   const [newCart, setNewCart] = useState([]);
   const [token, setToken] = useState();
+  const [OptionPayment, setOptionPayment] = useState("unselected");
+
+  const history = useHistory();
 
   useEffect(() => {
     const token = window.localStorage.getItem("token");
     setToken(token);
     getProfile();
-  }, []);
+  }, [token]);
 
   const getProfile = () => {
     const headers = {
@@ -82,7 +97,7 @@ const Cart = () => {
 
     const body = {
       products,
-      paymentMethod: "creditcard",
+      paymentMethod: OptionPayment,
     };
     axios
       .post(
@@ -92,6 +107,7 @@ const Cart = () => {
       )
       .then((response) => {
         console.log(response);
+        history.push("/");
       })
       .catch((error) => {
         console.log(error);
@@ -108,9 +124,14 @@ const Cart = () => {
     setCart(newCart);
   };
 
+  const handleRadio = (event) => {
+    setOptionPayment(event.target.value);
+  };
+
   console.log(cart);
   console.log(profile);
   console.log(restaurantDetail);
+  console.log(OptionPayment);
 
   const listProducts = restaurantProducts.map((product) => {
     return (
@@ -134,26 +155,21 @@ const Cart = () => {
         quantidade: quantidade,
         preco: produto.price,
         descricao: produto.description,
+        foto: produto.photoUrl,
       };
       novoCarrinho.push(novoProduto);
     } else {
-      novoCarrinho[verificaProduto].quantidade++;
+      novoCarrinho[verificaProduto].quantidade += quantidade;
     }
     total = produto.price * quantidade + total;
   });
 
-  // novoCarrinho.forEach((produto)=>{
-  //   const cartOrder = {
-  //     id: produto.id,
-  //     quantidade:quantidade
-  //   }
-
-  // })
-
   console.log(novoCarrinho);
+  console.log(novoCarrinho.length);
 
   const carrinhoRenderizado = novoCarrinho.map((produto) => (
     <Estilo01>
+      <ImgProduct src={produto.foto} />
       {produto.nome}&nbsp;
       {produto.quantidade}x<br></br>
       R${produto.preco.toFixed(2)}, {produto.descricao}
@@ -163,27 +179,64 @@ const Cart = () => {
 
   const totalFrete = total + restaurantDetail.shipping;
 
+  const funcaoBotao = () => {
+    if (novoCarrinho.length !== 0 && OptionPayment !== "unselected") {
+      placeOrder();
+    } else {
+      alert("Seleciona Opção");
+    }
+  };
+
   return (
-    <div>
+    <Estilo02>
       <h1>Produtos</h1>
       <div>{listProducts}</div>
       <hr></hr>
       <div>
         <div>Endereço de entrega: {profile.address}</div>
-        <div>
-          <p>Restaurante: {restaurantDetail.name}</p>
-          <p>Endereço: {restaurantDetail.address}</p>
-          <p>Tempo de Entrega: {restaurantDetail.deliveryTime} min</p>
-        </div>
+
         <h3>Cart</h3>
-        <Estilo01>{carrinhoRenderizado}</Estilo01>
-        <div>Frete: {restaurantDetail.shipping}</div>
-        <div>SUBTOTAL: R${total.toFixed(2)}</div>
-        <div>TOTAL: R${totalFrete.toFixed(2)}</div>
+        {novoCarrinho.length === 0 ? (
+          <div>Carrinho Vazio</div>
+        ) : (
+          <div>
+            <div>
+              <p>{restaurantDetail.name}</p>
+              <p> {restaurantDetail.address}</p>
+              <p> {restaurantDetail.deliveryTime} min</p>
+            </div>
+            <Estilo01>{carrinhoRenderizado}</Estilo01>
+          </div>
+        )}
+        <div>
+          <div>Frete: R${restaurantDetail.shipping}</div>
+          <div>SUBTOTAL: R${total.toFixed(2)}</div>
+          <div>TOTAL: R${totalFrete.toFixed(2)}</div>
+          <div></div>
+          <div>
+            <div>Forma de pagamento</div>
+            <hr></hr>
+            <input
+              type="radio"
+              name="opcao"
+              value="money"
+              onChange={handleRadio}
+            ></input>
+            <span>Dinheiro</span>
+            <input
+              type="radio"
+              name="opcao"
+              value="creditcard"
+              onChange={handleRadio}
+            ></input>
+            <span>Cartão de Crédito</span>
+          </div>
+        </div>
         <button onClick={getRestaurantDetail}>TESTE</button>
-        <button onClick={placeOrder}>CONFIRMAR</button>
+        <button onClick={funcaoBotao}>CONFIRMAR</button>
       </div>
-    </div>
+      <NavBar />
+    </Estilo02>
   );
 };
 

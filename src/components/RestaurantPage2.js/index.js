@@ -19,6 +19,9 @@ import {
   ProductText,
   ProductName,
   AddButton,
+  RemoveButton,
+  Number,
+  ProductsContainer
 } from "./styles";
 import HomePageIcon from "./images/homepage.svg";
 import CartIcon from "./images/shopping-cart.svg";
@@ -37,7 +40,7 @@ function RestaurantPage2() {
 
   const [quantity, setQuantity] = useState(1);
   const [modal, setModal] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState()  
+  const [selectedProduct, setSelectedProduct] = useState()
 
   const history = useHistory();
 
@@ -104,13 +107,21 @@ function RestaurantPage2() {
 
     localStorage.setItem("restaurantInfo", JSON.stringify(restaurantInfo));
     localStorage.setItem("cart", JSON.stringify(newCart));
-    
+    console.log(cart)
 
     setCart(newCart);
     setModal(false);
   };
 
-  const productsRender = restaurantDetails && restaurantDetails.products.map((product) =>  (
+  const removeProduct = (id) => {
+    const newCart = cart.filter((product) => product.id !== id);
+    setCart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
+    console.log(cart)
+  }
+
+  const productsRender = restaurantDetails && restaurantDetails.products.map((product) => (
+
     <ProductCard>
       <ProductImg src={product.photoUrl} />
       <ProductDetails>
@@ -118,44 +129,54 @@ function RestaurantPage2() {
         <ProductText> {product.description}</ProductText>
         <Price>R${product.price.toFixed(2)}</Price>
       </ProductDetails>
-      <div>
-        <AddButton onClick={() => handleModal(product)}>adicionar </AddButton>
-        {/* <button onClick={() => handleModal(product)}>remover</button> */}
-      </div>
+
+      {cart.length === 0 ?
+        (<AddButton onClick={() => handleModal(product)}>adicionar </AddButton>)
+        :
+        (<div>
+          <Number>{quantity}</Number>
+          <RemoveButton onClick={() => removeProduct(product.id)}>remover</RemoveButton>
+        </div>
+        )
+      }
+
     </ProductCard>
+
   ));
 
-  return ( 
-    restaurantDetails ?  
-    <RestaurantContainer>
-      <Header>
-        <img src={Back} onClick={goToHome} />
-        <TittlePage>Restaurante</TittlePage>
-      </Header>
-      <RestLogo src={restaurantDetails.logoUrl} />
-      <DetailsContainer>
-        <Name>{restaurantDetails.name}</Name>
-        <MainText>{restaurantDetails.category}</MainText>
-        <TimeAndShipping>
-          <MainText>{restaurantDetails.deliveryTime} min</MainText>
-          <MainText>Frete: R$ {restaurantDetails.shipping},00</MainText>
-        </TimeAndShipping>
-        <MainText>{restaurantDetails.address}</MainText>
-      </DetailsContainer>
-      <CategoryTitle>Principais:</CategoryTitle>
-      {productsRender}
-      <Footer>
-        <img src={HomePageIcon} onClick={goToHome}></img>
-        <img src={CartIcon} onClick={goToCart}></img>
-        <img src={AvatarIcon} onClick={goToProfile}></img>
-      </Footer>
-      <Modal
-        open={modal}
-        onClose={() => setModal(false)}
-        addProductToCart={addToCart}
-        handleSelectChange={handleSelectChange}
-      />
-    </RestaurantContainer> : null
+  return (
+    restaurantDetails ?
+      <RestaurantContainer>
+        <Header>
+          <img src={Back} onClick={goToHome} />
+          <TittlePage>Restaurante</TittlePage>
+        </Header>
+        <RestLogo src={restaurantDetails.logoUrl} />
+        <DetailsContainer>
+          <Name>{restaurantDetails.name}</Name>
+          <MainText>{restaurantDetails.category}</MainText>
+          <TimeAndShipping>
+            <MainText>{restaurantDetails.deliveryTime} min</MainText>
+            <MainText>Frete: R$ {restaurantDetails.shipping},00</MainText>
+          </TimeAndShipping>
+          <MainText>{restaurantDetails.address}</MainText>
+        </DetailsContainer>
+        <CategoryTitle>Principais:</CategoryTitle>
+        <ProductsContainer>
+          {productsRender}
+        </ProductsContainer>
+        <Footer>
+          <img src={HomePageIcon} onClick={goToHome}></img>
+          <img src={CartIcon} onClick={goToCart}></img>
+          <img src={AvatarIcon} onClick={goToProfile}></img>
+        </Footer>
+        <Modal
+          open={modal}
+          onClose={() => setModal(false)}
+          addProductToCart={addToCart}
+          handleSelectChange={handleSelectChange}
+        />
+      </RestaurantContainer> : null
   );
 }
 export default RestaurantPage2;

@@ -85,18 +85,20 @@ const ProfileInfoEdition = () => {
       <UserInfoContainer>
         <UserInfoCard>
           <form onSubmit={editUserInfo}>
-            <InputLabel>Nome* </InputLabel>
+            <InputLabel for="name">Nome* </InputLabel>
             <UserInput
               name="name"
+              id="name"
               placeholder="Joana Tavares"
               value={form.name}
               type="text"
               onChange={handleInputChange}
               required
             />
-            <InputLabel>E-mail* </InputLabel>
+            <InputLabel for="email">E-mail* </InputLabel>
             <UserInput
               name="email"
+              id="email"
               placeholder="joana@gmail.com"
               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
               value={form.email}
@@ -104,9 +106,10 @@ const ProfileInfoEdition = () => {
               onChange={handleInputChange}
               required
             />
-            <InputLabel>CPF</InputLabel>
+            <InputLabel for="cpf">CPF</InputLabel>
             <UserInput
               name="cpf"
+              id="cpf"
               placeholder="333.222.111-00"
               pattern="(\d{3})\.(\d{3})\.(\d{3})-(\d{2})"
               value={form.cpf}

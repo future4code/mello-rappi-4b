@@ -111,7 +111,9 @@ const UserProfilePage = () => {
                     src={EditIcon}
                     onClick={goToEditAddressPage}
                   />
-                  <HighlightedText>Endereço cadastrado:</HighlightedText>
+                  <HighlightedText data-testid="endereco">
+                    Endereço cadastrado:
+                  </HighlightedText>
                   <div>{user.address}</div>
                 </UserInfoCard>
               </UserInfoWrapper>

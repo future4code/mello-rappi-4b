@@ -91,54 +91,60 @@ const UserAddressPage = () => {
 
       <UserInfoContainer>
         <UserInfoCard>
-          <InputLabel>Logradouro* </InputLabel>
+          <InputLabel for="street">Logradouro* </InputLabel>
           <form onSubmit={editAddress}>
             <UserInput
               name="street"
+              id="street"
               placeholder="Av. Nove de Julho"
               value={form.street}
               type="text"
               onChange={handleInputChange}
               required
             ></UserInput>
-            <InputLabel>Número* </InputLabel>
+            <InputLabel for="number">Número* </InputLabel>
             <UserInput
               name="number"
+              id="number"
               placeholder="415"
               value={form.number}
               type="number"
               onChange={handleInputChange}
               required
             ></UserInput>
-            <InputLabel>Complemento</InputLabel>
+            <InputLabel for="complement">Complemento</InputLabel>
             <UserInput
               name="complement"
+              id="complement"
               placeholder="Apto./Bloco"
               value={form.complement}
               type="text"
               onChange={handleInputChange}
             ></UserInput>
-            <InputLabel>Bairro* </InputLabel>
+            <InputLabel for="neighbourhood">Bairro* </InputLabel>
             <UserInput
               name="neighbourhood"
+              id="neighbourhood"
               placeholder="Jardim das Palmeiras"
               value={form.neighbourhood}
               type="text"
               onChange={handleInputChange}
               required
             ></UserInput>
-            <InputLabel>Cidade* </InputLabel>
+            <InputLabel for="city">Cidade* </InputLabel>
             <UserInput
               name="city"
+              id="city"
               placeholder="São Paulo"
               value={form.city}
               type="text"
               onChange={handleInputChange}
               required
             ></UserInput>
-            <InputLabel>Estado* </InputLabel>
+            <InputLabel for="state">Estado* </InputLabel>
             <UserInput
               name="state"
+              id="state"
               pattern="[A-Z]{2,2}"
               placeholder="SP"
               type="text"

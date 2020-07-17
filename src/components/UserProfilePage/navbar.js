@@ -6,7 +6,7 @@ import ShoppingCart from "../../images/shopping-cart.svg";
 import styled from "styled-components";
 
 const NavigationBar = styled.div`
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: #fff;
   border: 1px solid gray;
   justify-content: space-between;
   display: flex;
@@ -18,7 +18,7 @@ const NavigationBar = styled.div`
 
 const NavigationButton = styled.button`
   width: 33.3%;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: #fff;
   border: none;
 `;
 

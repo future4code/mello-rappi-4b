@@ -113,19 +113,3 @@ export const CartCard = styled.div`
   left: 0;
   position: fixed;
 `
-export const ClockIcon = styled.p`
-  
-`
-export const CartCardText1 = styled.p`
-  color: white;
-  font-size: 16px;
-`
-export const CartCardText2 = styled.p`
-  color: black;
-  font-size: 16px;
-`
-export const CartCardText3 = styled.p`
-  color: black;
-  font-size: 16px;
-  font-weight: bold;
-`

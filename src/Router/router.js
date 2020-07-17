@@ -4,12 +4,13 @@ import { Switch, Route, BrowserRouter } from "react-router-dom";
 // pages
 import LoginPage from "../components/LoginPage";
 import SignUpPage from "../components/SignUpPage";
-import RestaurantPage from "../components/RestaurantPage";
+import RestaurantPage from "../components/RestaurantPage2.js";
 import HomePage from "../components/HomePage";
 import UserProfilePage from "../components/UserProfilePage";
 import UserProfileAddressEditPage from "../components/UserProfilePage/addressedition";
 import UserProfileEditPage from "../components/UserProfilePage/profileinfoedition";
-import Cart from "../components/Cart/index";
+import Cart from "../components/Cart";
+import RestaurantPage2 from "../components/RestaurantPage2";
 
 const Router = () => {
   return (
@@ -38,6 +39,9 @@ const Router = () => {
         </Route>
         <Route exact path="/cart">
           <Cart />
+        </Route>
+        <Route exact path="/restaurants2/:id">
+          <RestaurantPage2 />
         </Route>
 
         <Route path="*">

@@ -3,6 +3,27 @@ import styled from "styled-components";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import NavBar from "./navbar.js";
+import useAuthorization from "../../hooks/useAuthorization";
+import {
+  ProductCard,
+  ProductImg,
+  ProductDetails,
+  Price,
+  ProductText,
+  ProductName,
+  AddButton,
+  StyleQuantity,
+  StyleQuantity2,
+  Header,
+  TittlePage,
+  DetailsContainer,
+  MainText,
+  Name,
+  TimeAndShipping,
+  StyleCircular,
+} from "./styles";
+import Back from "./images/back.svg";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const Estilo01 = styled.div`
   display: flex;
@@ -13,23 +34,24 @@ const Estilo02 = styled.div`
   margin-bottom: 70px;
 `;
 
-const ImgProduct = styled.img`
-  width: 97px;
-  height: 112.6px;
-`;
-
 const Cart = () => {
+  useAuthorization();
   const [cart, setCart] = useState([]);
   const [profile, setProfile] = useState("");
   const [restaurantDetail, setRestaurantDetail] = useState("");
-  const [restaurantProducts, setRestaurantProducts] = useState([]);
+  const [restaurantInfo, setRestaurantInfo] = useState("");
   const [quantidade, setQuantidade] = useState(2);
   const novoCarrinho = [];
   const [newCart, setNewCart] = useState([]);
   const [token, setToken] = useState();
   const [OptionPayment, setOptionPayment] = useState("unselected");
+  const [cartNovo, setCartNovo] = useState([]);
 
   const history = useHistory();
+  const cartLocal = JSON.parse(window.localStorage.getItem("cart"));
+  const restaurantInfoLocal = JSON.parse(
+    window.localStorage.getItem("restaurantInfo")
+  );
 
   useEffect(() => {
     const token = window.localStorage.getItem("token");
@@ -43,11 +65,21 @@ const Cart = () => {
         auth: token,
       },
     };
+
+    if (cartLocal) {
+      setCart(cartLocal);
+    } else {
+      setCart([]);
+    }
+
+    setRestaurantInfo(restaurantInfoLocal);
+
     axios
       .get(
         "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/profile",
         headers
       )
+
       .then((response) => {
         setProfile(response.data.user);
         getRestaurantDetail();
@@ -63,14 +95,14 @@ const Cart = () => {
         auth: token,
       },
     };
+    const id = restaurantInfo.id;
     axios
       .get(
-        "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/restaurants/1",
+        `https://us-central1-missao-newton.cloudfunctions.net/rappi4B/restaurants/${id}`,
         headers
       )
       .then((response) => {
         setRestaurantDetail(response.data.restaurant);
-        setRestaurantProducts(response.data.restaurant.products);
       })
       .catch((error) => {
         console.log(error);
@@ -90,11 +122,6 @@ const Cart = () => {
       return { id: product.id, quantity: product.quantidade };
     });
 
-    // const products = {
-    //   id: newCart.id,
-    //   quantity: newCart.quantidade,
-    // };
-
     const body = {
       products,
       paymentMethod: OptionPayment,
@@ -107,21 +134,23 @@ const Cart = () => {
       )
       .then((response) => {
         console.log(response);
+        window.localStorage.removeItem("cart");
+        window.localStorage.removeItem("restaurantInfo");
         history.push("/");
       })
       .catch((error) => {
         console.log(error);
         console.log(body);
+        window.localStorage.removeItem("cart");
+        window.localStorage.removeItem("restaurantInfo");
+        history.push("/");
       });
-  };
-
-  const addToCart = (product) => {
-    setCart([...cart, product]);
   };
 
   const removeFromCart = (id) => {
     const newCart = cart.filter((produto) => produto.id !== id);
     setCart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
   };
 
   const handleRadio = (event) => {
@@ -133,17 +162,9 @@ const Cart = () => {
   console.log(restaurantDetail);
   console.log(OptionPayment);
 
-  const listProducts = restaurantProducts.map((product) => {
-    return (
-      <div>
-        <h4>{product.name} - </h4>
-        <p>{product.price.toFixed(2)}</p>
-        <button onClick={() => addToCart(product)}>COMPRAR</button>
-      </div>
-    );
-  });
-
   let total = 0;
+  console.log("cartLocal", cartLocal);
+  console.log("cartNovo", cartNovo);
   cart.forEach((produto) => {
     const verificaProduto = novoCarrinho.findIndex(
       (prod) => prod.id === produto.id
@@ -167,14 +188,22 @@ const Cart = () => {
   console.log(novoCarrinho);
   console.log(novoCarrinho.length);
 
-  const carrinhoRenderizado = novoCarrinho.map((produto) => (
-    <Estilo01>
-      <ImgProduct src={produto.foto} />
-      {produto.nome}&nbsp;
-      {produto.quantidade}x<br></br>
-      R${produto.preco.toFixed(2)}, {produto.descricao}
-      <button onClick={() => removeFromCart(produto.id)}>Remover</button>
-    </Estilo01>
+  const carrinhoRenderizado = novoCarrinho.map((product) => (
+    <ProductCard>
+      <ProductImg src={product.foto} />
+      <ProductDetails>
+        {/* <StyleQuantity2>{product.quantidade}</StyleQuantity2> */}
+
+        <ProductName>{product.nome}</ProductName>
+        <ProductText> {product.descricao}</ProductText>
+        <Price>R${product.preco.toFixed(2)}</Price>
+      </ProductDetails>
+      <div>
+        <AddButton onClick={() => removeFromCart(product.id)}>
+          Remover
+        </AddButton>
+      </div>
+    </ProductCard>
   ));
 
   const totalFrete = total + restaurantDetail.shipping;
@@ -187,57 +216,74 @@ const Cart = () => {
     }
   };
 
-  return (
-    <Estilo02>
-      <h1>Produtos</h1>
-      <div>{listProducts}</div>
-      <hr></hr>
-      <div>
-        <div>Endereço de entrega: {profile.address}</div>
+  const goToBack = () => {
+    history.goBack();
+  };
 
-        <h3>Cart</h3>
-        {novoCarrinho.length === 0 ? (
-          <div>Carrinho Vazio</div>
-        ) : (
-          <div>
-            <div>
-              <p>{restaurantDetail.name}</p>
-              <p> {restaurantDetail.address}</p>
-              <p> {restaurantDetail.deliveryTime} min</p>
-            </div>
-            <Estilo01>{carrinhoRenderizado}</Estilo01>
-          </div>
-        )}
+  if (restaurantDetail === "" && restaurantInfoLocal) {
+    return (
+      <StyleCircular>
+        <CircularProgress style={{ color: "#e86e5a" }} />
+      </StyleCircular>
+    );
+  }
+
+  if (token) {
+    return (
+      <Estilo02>
         <div>
-          <div>Frete: R${restaurantDetail.shipping}</div>
-          <div>SUBTOTAL: R${total.toFixed(2)}</div>
-          <div>TOTAL: R${totalFrete.toFixed(2)}</div>
-          <div></div>
+          <Header>
+            <img src={Back} onClick={goToBack} />
+            <TittlePage>Meu Carrinho</TittlePage>
+          </Header>
+          <div>Endereço de entrega: {profile.address}</div>
+
+          {novoCarrinho.length === 0 ? (
+            <div>Carrinho Vazio</div>
+          ) : (
+            <div>
+              <DetailsContainer>
+                <Name>{restaurantDetail.name}</Name>
+                <TimeAndShipping>
+                  <MainText>{restaurantDetail.address}</MainText>
+                </TimeAndShipping>
+                <MainText>{restaurantDetail.deliveryTime} min</MainText>
+              </DetailsContainer>
+              <Estilo01>{carrinhoRenderizado}</Estilo01>
+            </div>
+          )}
           <div>
-            <div>Forma de pagamento</div>
-            <hr></hr>
-            <input
-              type="radio"
-              name="opcao"
-              value="money"
-              onChange={handleRadio}
-            ></input>
-            <span>Dinheiro</span>
-            <input
-              type="radio"
-              name="opcao"
-              value="creditcard"
-              onChange={handleRadio}
-            ></input>
-            <span>Cartão de Crédito</span>
+            <MainText>Frete: R$ {restaurantDetail.shipping},00</MainText>
+            <MainText>SUBTOTAL: R${total.toFixed(2)}</MainText>
+            <MainText>TOTAL: R${totalFrete.toFixed(2)}</MainText>
+            <div></div>
+            <div>
+              <div>Forma de pagamento</div>
+              <hr></hr>
+              <input
+                type="radio"
+                name="opcao"
+                value="money"
+                onChange={handleRadio}
+              ></input>
+              <span>Dinheiro</span>
+              <input
+                type="radio"
+                name="opcao"
+                value="creditcard"
+                onChange={handleRadio}
+              ></input>
+              <span>Cartão de Crédito</span>
+            </div>
           </div>
+          <button onClick={funcaoBotao}>CONFIRMAR</button>
         </div>
-        <button onClick={getRestaurantDetail}>TESTE</button>
-        <button onClick={funcaoBotao}>CONFIRMAR</button>
-      </div>
-      <NavBar />
-    </Estilo02>
-  );
+        <NavBar />
+      </Estilo02>
+    );
+  } else {
+    return <div>Acesso Negado</div>;
+  }
 };
 
 export default Cart;

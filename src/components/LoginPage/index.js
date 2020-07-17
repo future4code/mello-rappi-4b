@@ -5,7 +5,7 @@ import axios from "axios";
 //import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 //import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
+//import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Visibility from '@material-ui/icons/Visibility';
@@ -76,15 +76,15 @@ const LoginPage = () => {
           required
           fullWidth
         />
-        <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
+        
         <OutlinedInput
           id="standard-adornment-password"
           type={showPassword ? 'text' : 'password'}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           style={{ margin: 8 }}
-          placeholder="Minimo 6 caracteres"
-          margin="normal"
+          placeholder="senha"
+          
           InputLabelProps={{
             shrink: true,
           }}
@@ -101,6 +101,7 @@ const LoginPage = () => {
               </IconButton>
             </InputAdornment>
           }
+          labelWidth={70}
         />
         <Button onClick={handleLogin}><b>Entrar</b></Button>
       </InputContainer>

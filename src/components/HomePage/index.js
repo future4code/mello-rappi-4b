@@ -26,6 +26,7 @@ const HomePage = () => {
   const [filter, setFilter] = useState(false);
   const [restaurants, setRestaurants] = useState([]);
   const [category, setCategory] = useState("");
+
   const setFilterTrue = () => {
     setFilter(true);
   };
@@ -59,6 +60,9 @@ const HomePage = () => {
       return restaurant.category === category;
     });
   }
+
+  
+
   return (
     <Feed>
       <Header>

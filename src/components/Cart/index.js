@@ -1,26 +1,63 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
+import NavBar from "./navbar.js";
+import useAuthorization from "../../hooks/useAuthorization";
+import {
+  ProductCard,
+  ProductImg,
+  ProductDetails,
+  Price,
+  ProductText,
+  ProductName,
+  AddButton,
+  StyleQuantity,
+  StyleQuantity2,
+  Header,
+  TittlePage,
+  DetailsContainer,
+  MainText,
+  Name,
+  TimeAndShipping,
+  StyleCircular,
+} from "./styles";
+import Back from "./images/back.svg";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const Estilo01 = styled.div`
   display: flex;
+  flex-direction: column;
+`;
+
+const Estilo02 = styled.div`
+  margin-bottom: 70px;
 `;
 
 const Cart = () => {
+  useAuthorization();
   const [cart, setCart] = useState([]);
   const [profile, setProfile] = useState("");
   const [restaurantDetail, setRestaurantDetail] = useState("");
-  const [restaurantProducts, setRestaurantProducts] = useState([]);
-  const [quantidade, setQuantidade] = useState(1);
+  const [restaurantInfo, setRestaurantInfo] = useState("");
+  const [quantidade, setQuantidade] = useState(2);
   const novoCarrinho = [];
   const [newCart, setNewCart] = useState([]);
   const [token, setToken] = useState();
+  const [OptionPayment, setOptionPayment] = useState("unselected");
+  const [cartNovo, setCartNovo] = useState([]);
+
+  const history = useHistory();
+  const cartLocal = JSON.parse(window.localStorage.getItem("cart"));
+  const restaurantInfoLocal = JSON.parse(
+    window.localStorage.getItem("restaurantInfo")
+  );
 
   useEffect(() => {
     const token = window.localStorage.getItem("token");
     setToken(token);
     getProfile();
-  }, []);
+  }, [token]);
 
   const getProfile = () => {
     const headers = {
@@ -28,11 +65,21 @@ const Cart = () => {
         auth: token,
       },
     };
+
+    if (cartLocal) {
+      setCart(cartLocal);
+    } else {
+      setCart([]);
+    }
+
+    setRestaurantInfo(restaurantInfoLocal);
+
     axios
       .get(
         "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/profile",
         headers
       )
+
       .then((response) => {
         setProfile(response.data.user);
         getRestaurantDetail();
@@ -48,14 +95,14 @@ const Cart = () => {
         auth: token,
       },
     };
+    const id = restaurantInfo.id;
     axios
       .get(
-        "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/restaurants/1",
+        `https://us-central1-missao-newton.cloudfunctions.net/rappi4B/restaurants/${id}`,
         headers
       )
       .then((response) => {
         setRestaurantDetail(response.data.restaurant);
-        setRestaurantProducts(response.data.restaurant.products);
       })
       .catch((error) => {
         console.log(error);
@@ -75,14 +122,9 @@ const Cart = () => {
       return { id: product.id, quantity: product.quantidade };
     });
 
-    // const products = {
-    //   id: newCart.id,
-    //   quantity: newCart.quantidade,
-    // };
-
     const body = {
       products,
-      paymentMethod: "creditcard",
+      paymentMethod: OptionPayment,
     };
     axios
       .post(
@@ -92,37 +134,37 @@ const Cart = () => {
       )
       .then((response) => {
         console.log(response);
+        window.localStorage.removeItem("cart");
+        window.localStorage.removeItem("restaurantInfo");
+        history.push("/");
       })
       .catch((error) => {
         console.log(error);
         console.log(body);
+        window.localStorage.removeItem("cart");
+        window.localStorage.removeItem("restaurantInfo");
+        history.push("/");
       });
-  };
-
-  const addToCart = (product) => {
-    setCart([...cart, product]);
   };
 
   const removeFromCart = (id) => {
     const newCart = cart.filter((produto) => produto.id !== id);
     setCart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
   };
 
-  //console.log(cart);
-  //console.log(profile);
-  //console.log(restaurantDetail);
+  const handleRadio = (event) => {
+    setOptionPayment(event.target.value);
+  };
 
-  const listProducts = restaurantProducts.map((product) => {
-    return (
-      <div>
-        <h4>{product.name} - </h4>
-        <p>{product.price.toFixed(2)}</p>
-        <button onClick={() => addToCart(product)}>COMPRAR</button>
-      </div>
-    );
-  });
+  console.log(cart);
+  console.log(profile);
+  console.log(restaurantDetail);
+  console.log(OptionPayment);
 
   let total = 0;
+  console.log("cartLocal", cartLocal);
+  console.log("cartNovo", cartNovo);
   cart.forEach((produto) => {
     const verificaProduto = novoCarrinho.findIndex(
       (prod) => prod.id === produto.id
@@ -134,57 +176,114 @@ const Cart = () => {
         quantidade: quantidade,
         preco: produto.price,
         descricao: produto.description,
+        foto: produto.photoUrl,
       };
       novoCarrinho.push(novoProduto);
     } else {
-      novoCarrinho[verificaProduto].quantidade++;
+      novoCarrinho[verificaProduto].quantidade += quantidade;
     }
     total = produto.price * quantidade + total;
   });
 
-  // novoCarrinho.forEach((produto)=>{
-  //   const cartOrder = {
-  //     id: produto.id,
-  //     quantidade:quantidade
-  //   }
+  console.log(novoCarrinho);
+  console.log(novoCarrinho.length);
 
-  // })
+  const carrinhoRenderizado = novoCarrinho.map((product) => (
+    <ProductCard>
+      <ProductImg src={product.foto} />
+      <ProductDetails>
+        {/* <StyleQuantity2>{product.quantidade}</StyleQuantity2> */}
 
-  //console.log(novoCarrinho);
-
-  const carrinhoRenderizado = novoCarrinho.map((produto) => (
-    <Estilo01>
-      {produto.nome}&nbsp;
-      {produto.quantidade}x<br></br>
-      R${produto.preco.toFixed(2)}, {produto.descricao}
-      <button onClick={() => removeFromCart(produto.id)}>Remover</button>
-    </Estilo01>
+        <ProductName>{product.nome}</ProductName>
+        <ProductText> {product.descricao}</ProductText>
+        <Price>R${product.preco.toFixed(2)}</Price>
+      </ProductDetails>
+      <div>
+        <AddButton onClick={() => removeFromCart(product.id)}>
+          Remover
+        </AddButton>
+      </div>
+    </ProductCard>
   ));
 
   const totalFrete = total + restaurantDetail.shipping;
 
-  return (
-    <div>
-      <h1>Produtos</h1>
-      <div>{listProducts}</div>
-      <hr></hr>
-      <div>
-        <div>Endereço de entrega: {profile.address}</div>
+  const funcaoBotao = () => {
+    if (novoCarrinho.length !== 0 && OptionPayment !== "unselected") {
+      placeOrder();
+    } else {
+      alert("Seleciona Opção");
+    }
+  };
+
+  const goToBack = () => {
+    history.goBack();
+  };
+
+  if (restaurantDetail === "" && restaurantInfoLocal) {
+    return (
+      <StyleCircular>
+        <CircularProgress style={{ color: "#e86e5a" }} />
+      </StyleCircular>
+    );
+  }
+
+  if (token) {
+    return (
+      <Estilo02>
         <div>
-          <p>Restaurante: {restaurantDetail.name}</p>
-          <p>Endereço: {restaurantDetail.address}</p>
-          <p>Tempo de Entrega: {restaurantDetail.deliveryTime} min</p>
+          <Header>
+            <img src={Back} onClick={goToBack} />
+            <TittlePage>Meu Carrinho</TittlePage>
+          </Header>
+          <div>Endereço de entrega: {profile.address}</div>
+
+          {novoCarrinho.length === 0 ? (
+            <div>Carrinho Vazio</div>
+          ) : (
+            <div>
+              <DetailsContainer>
+                <Name>{restaurantDetail.name}</Name>
+                <TimeAndShipping>
+                  <MainText>{restaurantDetail.address}</MainText>
+                </TimeAndShipping>
+                <MainText>{restaurantDetail.deliveryTime} min</MainText>
+              </DetailsContainer>
+              <Estilo01>{carrinhoRenderizado}</Estilo01>
+            </div>
+          )}
+          <div>
+            <MainText>Frete: R$ {restaurantDetail.shipping},00</MainText>
+            <MainText>SUBTOTAL: R${total.toFixed(2)}</MainText>
+            <MainText>TOTAL: R${totalFrete.toFixed(2)}</MainText>
+            <div></div>
+            <div>
+              <div>Forma de pagamento</div>
+              <hr></hr>
+              <input
+                type="radio"
+                name="opcao"
+                value="money"
+                onChange={handleRadio}
+              ></input>
+              <span>Dinheiro</span>
+              <input
+                type="radio"
+                name="opcao"
+                value="creditcard"
+                onChange={handleRadio}
+              ></input>
+              <span>Cartão de Crédito</span>
+            </div>
+          </div>
+          <button onClick={funcaoBotao}>CONFIRMAR</button>
         </div>
-        <h3>Cart</h3>
-        <Estilo01>{carrinhoRenderizado}</Estilo01>
-        <div>Frete: {restaurantDetail.shipping}</div>
-        <div>SUBTOTAL: R${total.toFixed(2)}</div>
-        <div>TOTAL: R${totalFrete.toFixed(2)}</div>
-        <button onClick={getRestaurantDetail}>TESTE</button>
-        <button onClick={placeOrder}>CONFIRMAR</button>
-      </div>
-    </div>
-  );
+        <NavBar />
+      </Estilo02>
+    );
+  } else {
+    return <div>Acesso Negado</div>;
+  }
 };
 
 export default Cart;

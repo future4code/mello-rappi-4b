@@ -33,7 +33,8 @@ const baseUrl =
   "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/restaurants";
 
 function RestaurantPage2() {
-  const { restaurantId } = useParams();
+  const {restaurantId} = useParams();
+
 
   const [restaurantDetails, setRestaurantDetails] = useState();
   const [cart, setCart] = useState([]);
@@ -107,7 +108,6 @@ function RestaurantPage2() {
 
     localStorage.setItem("restaurantInfo", JSON.stringify(restaurantInfo));
     localStorage.setItem("cart", JSON.stringify(newCart));
-    console.log(cart)
 
     setCart(newCart);
     setModal(false);
@@ -117,7 +117,6 @@ function RestaurantPage2() {
     const newCart = cart.filter((product) => product.id !== id);
     setCart(newCart);
     localStorage.setItem("cart", JSON.stringify(newCart));
-    console.log(cart)
   }
 
   const productsRender = restaurantDetails && restaurantDetails.products.map((product) => (
@@ -134,7 +133,7 @@ function RestaurantPage2() {
         (<AddButton onClick={() => handleModal(product)}>adicionar </AddButton>)
         :
         (<div>
-          <Number>{quantity}</Number>
+          {/* <Number>{quantity}</Number> */}
           <RemoveButton onClick={() => removeProduct(product.id)}>remover</RemoveButton>
         </div>
         )

@@ -22,19 +22,18 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import HomePageIcon from "./images/homepage.svg";
 import CartIcon from "./images/shopping-cart.svg";
 import AvatarIcon from "./images/avatar.svg";
-import Clock from "./images/clock.svg";
 import CardRestaurant from "./CardRestaurant";
 import Filter from "./FilteredPage";
 
 const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/restaurants";
 
 const HomePage = () => {
+
   const [filter, setFilter] = useState(false);
   const [restaurants, setRestaurants] = useState([]);
   const [category, setCategory] = useState("");
   const [token, setToken] = useState(null);
-  const history = useHistory()
-
+  
 
   useEffect(() => {
     const token = window.localStorage.getItem('token')
@@ -46,11 +45,9 @@ const HomePage = () => {
     }
   });
 
-
   const setFilterTrue = () => {
     setFilter(true);
   };
-
 
   const getRestaurants = () => {
     const axiosConfig = {
@@ -64,11 +61,9 @@ const HomePage = () => {
     });
   };
 
-
   const setFilterFalse = () => {
     setFilter(false);
   };
-
 
   const changeCategory = (newCategory) => {
     if (newCategory !== category) {
@@ -78,14 +73,13 @@ const HomePage = () => {
     }
   };
 
-
   let filteredList = restaurants;
   if (category !== "") {
     filteredList = filteredList.filter((restaurant) => {
       return restaurant.category === category;
     });
   };
-
+  const history = useHistory()
   const goToCart = () => {
     history.push('./cart')
   };
@@ -93,7 +87,7 @@ const HomePage = () => {
   const goToProfile = () => {
     history.push('./profile')
   };
-  const RestauranteInfo = window.localStorage.getItem(RestauranteInfo)
+  
   return (
     <Feed>
       <Header>
@@ -144,13 +138,6 @@ const HomePage = () => {
             <Filter restaurants={restaurants} />
           </RestaurantContainer>
         )}
-        <CartCard>
-          <img src={Clock} />
-          <CartCardText1>Pedido em andamento</CartCardText1>
-          <CartCardText2>{RestauranteInfo.name} </CartCardText2>
-          {/* RestauranteInfo.name
-          RestauranteInfo.totalPrice */}
-        </CartCard>
       <Footer>
         <img src={HomePageIcon} onClick={setFilterFalse}></img>
         <img src={CartIcon} onClick={goToCart}></img>

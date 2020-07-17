@@ -4,7 +4,7 @@ import { Switch, Route, BrowserRouter } from "react-router-dom";
 // pages
 import LoginPage from "../components/LoginPage";
 import SignUpPage from "../components/SignUpPage";
-import RestaurantPage from "../components/RestaurantPage";
+import RestaurantPage from "../components/RestaurantPage2.js";
 import HomePage from "../components/HomePage";
 import UserProfilePage from "../components/UserProfilePage";
 import UserProfileAddressEditPage from "../components/UserProfilePage/addressedition";

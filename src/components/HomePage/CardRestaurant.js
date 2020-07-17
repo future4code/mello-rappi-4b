@@ -7,7 +7,9 @@ const CardRestaurant = (props) => {
   
   const history = useHistory();
   const goToRestaurantPage = (id) => {
-    history.push(`/restaurants/${id}`);
+    
+    history.push(`restaurants/${id}`);
+    console.log(id)
   };
 
   return (

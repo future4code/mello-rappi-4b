@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 
@@ -21,6 +21,7 @@ import {
 } from './styles'
 
 import LogoImage from './logo.svg';
+import SplashScreen from "../SplashScreen/";
 
 
 const BaseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/login"
@@ -30,6 +31,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [ showPassword , setShowPassword ] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleClickShowPassword = () => {
     setShowPassword( !showPassword );
@@ -55,8 +57,20 @@ const LoginPage = () => {
   const goToSignUpPage = () => {
     history.push("/signup");
   };
+
+  const showSplashScreen = () => {
+    setTimeout(()=> {
+      setIsLoading(false)
+    }, 5000)
+  };
+
+  useEffect(() => {
+    showSplashScreen();
+  });
+
   return (
     <PageConteiner>
+      {isLoading === true && <SplashScreen/>}
       <Logo src={LogoImage} />
       <Tittle>Entrar</Tittle>
       <InputContainer>
@@ -111,3 +125,21 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+/*
+import SplashScreen from "../SplashScreen/";
+const [isLoading, setIsLoading] = useState(true);
+
+const showSplashScreen = () => {
+    setTimeout(()=> {
+      setIsLoading(false)
+    }, 5000)
+  }
+
+useEffect(() => {
+    showSplashScreen();
+  });
+
+{isLoading === true && <SplashScreen/>}
+
+}*/

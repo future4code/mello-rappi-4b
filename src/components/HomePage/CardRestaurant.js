@@ -1,16 +1,19 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-import { RestCard, RestLogo, CardFooter, CardName, CardInfo } from "./styles";
+import { RestCard, RestLogo, CardFooter, CardName, CardInfo, CardContainer } from "./styles";
 
 const CardRestaurant = (props) => {
+  
   const history = useHistory();
   const goToRestaurantPage = (id) => {
-    history.push(`/restaurants/${id}`);
+    
+    history.push(`restaurants/${id}`);
+    console.log(id)
   };
 
   return (
-    <div>
+    <CardContainer>
       {props.restaurants.map((restaurant) => {
         return (
           <RestCard
@@ -21,12 +24,12 @@ const CardRestaurant = (props) => {
             <CardName>{restaurant.name}</CardName>
             <CardFooter>
               <CardInfo>{restaurant.deliveryTime} min</CardInfo>
-              <CardInfo>Frete: R$ {restaurant.shipping},00</CardInfo>
+              <CardInfo>Frete: R$ {restaurant.shipping.toFixed(2)}</CardInfo>
             </CardFooter>
           </RestCard>
         );
       })}
-    </div>
+    </CardContainer>
   );
 };
 export default CardRestaurant;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-
+import { useHistory } from 'react-router-dom'
 import axios from "axios";
 
 import {
@@ -11,6 +11,10 @@ import {
   FilterKey,
   RestaurantContainer,
   Footer,
+  ClockIcon,
+  CartCard,
+  CartCardText1,
+  CartCardText2
 } from "./styles";
 import TextField from "@material-ui/core/TextField";
 import SearchIcon from "@material-ui/icons/Search";
@@ -19,34 +23,50 @@ import HomePageIcon from "./images/homepage.svg";
 import CartIcon from "./images/shopping-cart.svg";
 import AvatarIcon from "./images/avatar.svg";
 import CardRestaurant from "./CardRestaurant";
-import Filter from "./Filter";
-const baseUrl =
-  "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/restaurants";
+import Filter from "./FilteredPage";
+
+const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/restaurants";
+
 const HomePage = () => {
+
   const [filter, setFilter] = useState(false);
   const [restaurants, setRestaurants] = useState([]);
   const [category, setCategory] = useState("");
 
+  const [token, setToken] = useState(null);
+  
+
+  useEffect(() => {
+    const token = window.localStorage.getItem('token')
+    setToken(token)
+    if (!token) {
+      history.push('/login')
+    } else {
+      getRestaurants();
+    }
+  });
+
+
   const setFilterTrue = () => {
     setFilter(true);
   };
+
   const getRestaurants = () => {
     const axiosConfig = {
       headers: {
         auth:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkNxMDRDU0hJcllKTU80ZVZ4YVppIiwibmFtZSI6IkxhaXMiLCJlbWFpbCI6ImxhaXNAbGFpcy5jb20iLCJjcGYiOiIxMTEuMTExLjExMS0xMiIsImhhc0FkZHJlc3MiOnRydWUsImFkZHJlc3MiOiJSLiBkb3MgQm9ib3MsIDE0MCwgMjAgLSBWaWxhIE4uIENvbmNlacOnw6NvIiwiaWF0IjoxNTk0NjU3NzA4fQ.WH4ETj3o-DhWhZidHQD5piHbq-BpqHrPEWCLgMhwUoU",
+          token
       },
     };
     axios.get(baseUrl, axiosConfig).then((response) => {
       setRestaurants(response.data.restaurants);
     });
   };
-  useEffect(() => {
-    getRestaurants();
-  });
+
   const setFilterFalse = () => {
     setFilter(false);
   };
+
   const changeCategory = (newCategory) => {
     if (newCategory !== category) {
       setCategory(newCategory);
@@ -54,13 +74,22 @@ const HomePage = () => {
       setCategory("");
     }
   };
+
   let filteredList = restaurants;
   if (category !== "") {
     filteredList = filteredList.filter((restaurant) => {
       return restaurant.category === category;
     });
-  }
 
+  };
+  const history = useHistory()
+  const goToCart = () => {
+    history.push('./cart')
+  };
+
+  const goToProfile = () => {
+    history.push('./profile')
+  };
   
 
   return (
@@ -109,14 +138,14 @@ const HomePage = () => {
           </RestaurantContainer>
         </div>
       ) : (
-        <RestaurantContainer>
-          <Filter restaurants={restaurants} />
-        </RestaurantContainer>
-      )}
+          <RestaurantContainer>
+            <Filter restaurants={restaurants} />
+          </RestaurantContainer>
+        )}
       <Footer>
         <img src={HomePageIcon} onClick={setFilterFalse}></img>
-        <img src={CartIcon}></img>
-        <img src={AvatarIcon}></img>
+        <img src={CartIcon} onClick={goToCart}></img>
+        <img src={AvatarIcon} onClick={goToProfile}></img>
       </Footer>
     </Feed>
   );

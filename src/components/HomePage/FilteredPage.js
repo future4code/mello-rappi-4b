@@ -45,7 +45,7 @@ const Filter = (props) => {
             onChange={handleInputChange} />
             </InputContainer>
             <FilterResponse>
-            {name === "" ? (<Tittle>Digite algo no campo de pesquisa</Tittle>) : 
+            {name === "" ? (<Tittle>Busque por nome do restaurante</Tittle>) : 
             (orderedList.length !== 0 ? (
             orderedList.map(restaurant => {
                 return (

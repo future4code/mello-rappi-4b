@@ -4,6 +4,7 @@ export const Feed = styled.div`
   width: 360px;
   height: 640px;
   font-family: Roboto;
+  margin-left: 8px;
 `;
 export const Header = styled.div`
   width: 360px;
@@ -57,6 +58,9 @@ export const RestaurantContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+export const CardContainer = styled.div`
+  margin-bottom: 50px;
+`;
 export const RestCard = styled.div`
   width: 328px;
   height: 200px;
@@ -101,3 +105,11 @@ export const FilterResponse = styled.div`
   margin-top: 16px;
   margin-left: 16px;
 `;
+export const CartCard = styled.div`
+  width: 100%;
+  height: 118px;
+  background-color: #e86e5a;
+  bottom: 49px;
+  left: 0;
+  position: fixed;
+`

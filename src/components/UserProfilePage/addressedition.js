@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import useForm from "../../hooks/useForm";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
@@ -21,92 +22,64 @@ const UserInfoCard = styled.section`
   margin-bottom: 10px;
 `;
 
-const axiosConfig = {
-  headers: {
-    auth:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InBjNXFTdlpoM0U1cFFRSE1qcVVEIiwibmFtZSI6IkZhYnLDrWNpbyBSb2RyaWd1ZXMiLCJlbWFpbCI6ImVhcnRoYm9ybnNoZXBhcmRAbGFiZW51LmNvbSIsImNwZiI6IjQ0NC4xMTEuMTExLTExIiwiaGFzQWRkcmVzcyI6dHJ1ZSwiYWRkcmVzcyI6IkF2IDkgZGUgSnVsaG8sIDI4OCwgNzEgLSBKYXJkaW0gQ29uY2Vpw6fDo28iLCJpYXQiOjE1OTQ2NjgyOTJ9.KktOLR9lOwxi_VA-w2TwEwuXpKccg1dkV100ozdfpZw",
-  },
-};
-
 const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4B";
 
-const UserProfilePage = () => {
+const UserAddressPage = () => {
+  const { form, onChange, resetForm } = useForm({
+    street: "",
+    number: "",
+    complement: "",
+    neighbourhood: "",
+    city: "",
+    state: "",
+  });
   const history = useHistory();
-  const [currentInfo, setCurrentInfo] = useState(undefined);
-  const [firstAttempt, setFirstAttempt] = useState(false);
-  const [street, setStreet] = useState();
-  const [number, setNumber] = useState();
-  const [neighbourhood, setNeighbourhood] = useState();
-  const [city, setCity] = useState();
-  const [state, setState] = useState();
-  const [complement, setComplement] = useState();
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
-    getFullAdress();
+    const receivedToken = window.localStorage.getItem("token");
+    setToken(receivedToken);
+  }, [token]);
 
-    if (currentInfo !== undefined && firstAttempt === false) {
-      setFirstAttempt(true);
-      setStreet(currentInfo.street);
-      setNumber(currentInfo.number);
-      setNeighbourhood(currentInfo.neighbourhood);
-      setCity(currentInfo.city);
-      setState(currentInfo.state);
-      setComplement(currentInfo.complement);
-    }
-  }, [currentInfo, firstAttempt]);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
 
-  const getFullAdress = () => {
-    axios.get(`${baseUrl}/profile/address`, axiosConfig).then((response) => {
-      setCurrentInfo(response.data.address);
-    });
+    onChange(name, value);
+  };
+
+  const axiosConfig = {
+    headers: {
+      auth: token,
+    },
   };
 
   const goToProfilePage = () => {
     history.push("/profile");
   };
 
-  const editAddress = () => {
+  const editAddress = (event) => {
+    event.preventDefault();
+
     const body = {
-      street: street,
-      number: number,
-      complement: complement,
-      neighbourhood: neighbourhood,
-      city: city,
-      state: state,
+      street: form.street,
+      number: form.number,
+      complement: form.complement,
+      neighbourhood: form.neighbourhood,
+      city: form.city,
+      state: form.state,
     };
 
     axios
       .put(`${baseUrl}/address`, body, axiosConfig)
-      .then(() => {
+      .then((response) => {
+        window.localStorage.setItem("token", response.data.token);
         alert("Endereço atualizado/cadastrado com sucesso!");
+        resetForm();
+        history.push("/profile");
       })
       .catch((e) => {
         alert(e);
       });
-  };
-
-  const handleUpdateStreet = (event) => {
-    setStreet(event.target.value);
-  };
-
-  const handleUpdateNumber = (event) => {
-    setNumber(event.target.value);
-  };
-
-  const handleUpdateComplement = (event) => {
-    setComplement(event.target.value);
-  };
-
-  const handleUpdateNeighbourhood = (event) => {
-    setNeighbourhood(event.target.value);
-  };
-
-  const handleUpdateCity = (event) => {
-    setCity(event.target.value);
-  };
-
-  const handleUpdateState = (event) => {
-    setState(event.target.value);
   };
 
   return (
@@ -118,49 +91,68 @@ const UserProfilePage = () => {
 
       <UserInfoContainer>
         <UserInfoCard>
-          <form>
-            <InputLabel>Logradouro* </InputLabel>
+          <InputLabel for="street">Logradouro* </InputLabel>
+          <form onSubmit={editAddress}>
             <UserInput
+              name="street"
+              id="street"
               placeholder="Av. Nove de Julho"
-              value={street}
-              onChange={handleUpdateStreet}
+              value={form.street}
+              type="text"
+              onChange={handleInputChange}
               required
             ></UserInput>
-            <InputLabel>Número* </InputLabel>
+            <InputLabel for="number">Número* </InputLabel>
             <UserInput
+              name="number"
+              id="number"
               placeholder="415"
-              value={number}
-              onChange={handleUpdateNumber}
+              value={form.number}
+              type="number"
+              onChange={handleInputChange}
               required
             ></UserInput>
-            <InputLabel>Complemento</InputLabel>
+            <InputLabel for="complement">Complemento</InputLabel>
             <UserInput
+              name="complement"
+              id="complement"
               placeholder="Apto./Bloco"
-              value={complement}
-              onChange={handleUpdateComplement}
+              value={form.complement}
+              type="text"
+              onChange={handleInputChange}
             ></UserInput>
-            <InputLabel>Bairro* </InputLabel>
+            <InputLabel for="neighbourhood">Bairro* </InputLabel>
             <UserInput
+              name="neighbourhood"
+              id="neighbourhood"
               placeholder="Jardim das Palmeiras"
-              value={neighbourhood}
-              onChange={handleUpdateNeighbourhood}
+              value={form.neighbourhood}
+              type="text"
+              onChange={handleInputChange}
               required
             ></UserInput>
-            <InputLabel>Cidade* </InputLabel>
+            <InputLabel for="city">Cidade* </InputLabel>
             <UserInput
+              name="city"
+              id="city"
               placeholder="São Paulo"
-              value={city}
-              onChange={handleUpdateCity}
+              value={form.city}
+              type="text"
+              onChange={handleInputChange}
               required
             ></UserInput>
-            <InputLabel>Estado* </InputLabel>
+            <InputLabel for="state">Estado* </InputLabel>
             <UserInput
+              name="state"
+              id="state"
+              pattern="[A-Z]{2,2}"
               placeholder="SP"
-              value={state}
-              onChange={handleUpdateState}
+              type="text"
+              value={form.state}
+              onChange={handleInputChange}
               required
             ></UserInput>
-            <SubmitButton onClick={editAddress}>Salvar</SubmitButton>
+            <SubmitButton type="submit">Salvar</SubmitButton>
           </form>
         </UserInfoCard>
       </UserInfoContainer>
@@ -168,4 +160,4 @@ const UserProfilePage = () => {
   );
 };
 
-export default UserProfilePage;
+export default UserAddressPage;

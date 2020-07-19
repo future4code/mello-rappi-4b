@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import useInputValue from "../../hooks/useInputValue";
 import axios from "axios";
+import useForm from "../../hooks/useForm";
 import { useHistory } from "react-router-dom";
 import GoBackIcon from "../../images/back.svg";
 import styled from "styled-components";
@@ -22,68 +22,57 @@ const UserInfoCard = styled.section`
   margin-bottom: 10px;
 `;
 
-const axiosConfig = {
-  headers: {
-    auth:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InBjNXFTdlpoM0U1cFFRSE1qcVVEIiwibmFtZSI6IkZhYnLDrWNpbyBSb2RyaWd1ZXMiLCJlbWFpbCI6ImVhcnRoYm9ybnNoZXBhcmRAbGFiZW51LmNvbSIsImNwZiI6IjQ0NC4xMTEuMTExLTExIiwiaGFzQWRkcmVzcyI6dHJ1ZSwiYWRkcmVzcyI6IkF2IDkgZGUgSnVsaG8sIDI4OCwgNzEgLSBKYXJkaW0gQ29uY2Vpw6fDo28iLCJpYXQiOjE1OTQ2NjgyOTJ9.KktOLR9lOwxi_VA-w2TwEwuXpKccg1dkV100ozdfpZw",
-  },
-};
-
 const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4B";
 
 const ProfileInfoEdition = () => {
-  const [currentInfo, setCurrentInfo] = useState(undefined);
-  const [firstAttempt, setFirstAttempt] = useState(false);
-  const [name, handleChangeName] = useInputValue("");
-  const [email, handleChangeEmail] = useInputValue("");
-  const [cpf, setCpf] = useState("");
+  const { form, onChange, resetForm } = useForm({
+    name: "",
+    email: "",
+    cpf: "",
+  });
   const history = useHistory();
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
-    getProfile();
+    const receivedToken = window.localStorage.getItem("token");
+    setToken(receivedToken);
+  }, [token]);
 
-    // if (currentInfo !== undefined && firstAttempt === false) {
-    //   setFirstAttempt(true);
-    //   setName(currentInfo.name);
-    //   setEmail(currentInfo.email);
-    //   setCpf(currentInfo.cpf);
-    // }
-  }, [currentInfo, firstAttempt]);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
 
-  const getProfile = () => {
-    axios
-      .get(`${baseUrl}/profile`, axiosConfig)
-      .then((response) => {
-        setCurrentInfo(response.data.user);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    onChange(name, value);
+  };
+
+  const axiosConfig = {
+    headers: {
+      auth: token,
+    },
   };
 
   const goToProfilePage = () => {
     history.push("/profile");
   };
 
-  const editUserInfo = () => {
+  const editUserInfo = (event) => {
+    event.preventDefault();
+
     const body = {
-      name: name,
-      email: email,
-      cpf: cpf,
+      name: form.name,
+      email: form.email,
+      cpf: form.cpf,
     };
 
     axios
       .put(`${baseUrl}/profile`, body, axiosConfig)
       .then(() => {
         alert("Perfil atualizado com sucesso!");
+        resetForm();
+        history.push("/profile");
       })
       .catch((e) => {
         alert(e);
       });
-  };
-
-  const handleUpdateCpf = (event) => {
-    setCpf(event.target.value);
   };
 
   return (
@@ -95,29 +84,40 @@ const ProfileInfoEdition = () => {
 
       <UserInfoContainer>
         <UserInfoCard>
-          <form>
-            <InputLabel>Nome* </InputLabel>
+          <form onSubmit={editUserInfo}>
+            <InputLabel for="name">Nome* </InputLabel>
             <UserInput
-              value={name}
+              name="name"
+              id="name"
+              placeholder="Joana Tavares"
+              value={form.name}
               type="text"
-              onChange={handleChangeName}
+              onChange={handleInputChange}
               required
-            ></UserInput>
-            <InputLabel>E-mail* </InputLabel>
+            />
+            <InputLabel for="email">E-mail* </InputLabel>
             <UserInput
-              value={email}
+              name="email"
+              id="email"
+              placeholder="joana@gmail.com"
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+              value={form.email}
               type="email"
-              onChange={handleChangeEmail}
+              onChange={handleInputChange}
               required
-            ></UserInput>
-            <InputLabel>CPF</InputLabel>
+            />
+            <InputLabel for="cpf">CPF</InputLabel>
             <UserInput
-              pattern="/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/"
-              value={cpf}
-              onChange={handleUpdateCpf}
+              name="cpf"
+              id="cpf"
+              placeholder="333.222.111-00"
+              pattern="(\d{3})\.(\d{3})\.(\d{3})-(\d{2})"
+              value={form.cpf}
+              type="text"
+              onChange={handleInputChange}
               required
-            ></UserInput>
-            <SubmitButton onClick={editUserInfo}>Salvar</SubmitButton>
+            />
+            <SubmitButton type="submit">Salvar</SubmitButton>
           </form>
         </UserInfoCard>
       </UserInfoContainer>

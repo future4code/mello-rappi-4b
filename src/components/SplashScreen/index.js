@@ -5,7 +5,7 @@ import LogoImage from "./logoSplash.svg";
 const Div = styled.div`
 width: 100vw;
 height: 100vh;
-background-color: orange;
+background-color: #e86e5a;
 color: white;
 animation-name: fadeOutOpacity;
 animation-iteration-count: 1;
@@ -25,8 +25,9 @@ animation-delay: 3s;
 export const Logo = styled.img`
     width: 208px;
     height: 116px;
-    margin-top: 88px;
-    margin-bottom: 28px;
+    margin-left: 80px;
+    margin-top: 190px;
+    
 `
 
 const SplashScreen = () => {

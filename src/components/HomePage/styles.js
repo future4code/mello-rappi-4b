@@ -112,4 +112,18 @@ export const CartCard = styled.div`
   bottom: 49px;
   left: 0;
   position: fixed;
-`
+`;
+
+export const Rectangle = styled.div`
+  width: 328px;
+  height: 42px;
+  border-radius: 2px;
+  background-color: #e86e5a;
+`;
+
+export const Button = styled.div`
+  width: 328px;
+  height: 42px;
+  border-radius: 2px;
+  background-color: #e86e5a;
+`;

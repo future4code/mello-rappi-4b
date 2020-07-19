@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 import {
@@ -14,7 +14,7 @@ import {
   ClockIcon,
   CartCard,
   CartCardText1,
-  CartCardText2
+  CartCardText2,
 } from "./styles";
 import TextField from "@material-ui/core/TextField";
 import SearchIcon from "@material-ui/icons/Search";
@@ -25,25 +25,24 @@ import AvatarIcon from "./images/avatar.svg";
 import CardRestaurant from "./CardRestaurant";
 import Filter from "./FilteredPage";
 
-const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/restaurants";
+const baseUrl =
+  "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/restaurants";
 
 const HomePage = () => {
-
   const [filter, setFilter] = useState(false);
   const [restaurants, setRestaurants] = useState([]);
   const [category, setCategory] = useState("");
   const [token, setToken] = useState(null);
-  
 
   useEffect(() => {
-    const token = window.localStorage.getItem('token')
-    setToken(token)
+    const token = window.localStorage.getItem("token");
+    setToken(token);
     if (!token) {
-      history.push('/login')
+      history.push("/login");
     } else {
       getRestaurants();
     }
-  });
+  }, [token]);
 
   const setFilterTrue = () => {
     setFilter(true);
@@ -52,8 +51,7 @@ const HomePage = () => {
   const getRestaurants = () => {
     const axiosConfig = {
       headers: {
-        auth:
-          token
+        auth: token,
       },
     };
     axios.get(baseUrl, axiosConfig).then((response) => {
@@ -78,16 +76,16 @@ const HomePage = () => {
     filteredList = filteredList.filter((restaurant) => {
       return restaurant.category === category;
     });
-  };
-  const history = useHistory()
+  }
+  const history = useHistory();
   const goToCart = () => {
-    history.push('./cart')
+    history.push("./cart");
   };
 
   const goToProfile = () => {
-    history.push('./profile')
+    history.push("./profile");
   };
-  
+
   return (
     <Feed>
       <Header>
@@ -134,10 +132,10 @@ const HomePage = () => {
           </RestaurantContainer>
         </div>
       ) : (
-          <RestaurantContainer>
-            <Filter restaurants={restaurants} />
-          </RestaurantContainer>
-        )}
+        <RestaurantContainer>
+          <Filter restaurants={restaurants} />
+        </RestaurantContainer>
+      )}
       <Footer>
         <img src={HomePageIcon} onClick={setFilterFalse}></img>
         <img src={CartIcon} onClick={goToCart}></img>

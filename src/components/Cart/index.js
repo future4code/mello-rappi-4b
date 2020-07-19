@@ -21,6 +21,16 @@ import {
   Name,
   TimeAndShipping,
   StyleCircular,
+  Rectangle,
+  Button,
+  CartContainer,
+  TotalPrice,
+  TotalText,
+  CardPrice,
+  RectangleAddress,
+  SecondaryText,
+  RectangleDisabled,
+  StyleQuantity3,
 } from "./styles";
 import Back from "./images/back.svg";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -30,22 +40,17 @@ const Estilo01 = styled.div`
   flex-direction: column;
 `;
 
-const Estilo02 = styled.div`
-  margin-bottom: 70px;
-`;
-
 const Cart = () => {
   useAuthorization();
   const [cart, setCart] = useState([]);
   const [profile, setProfile] = useState("");
   const [restaurantDetail, setRestaurantDetail] = useState("");
   const [restaurantInfo, setRestaurantInfo] = useState("");
-  const [quantidade, setQuantidade] = useState(2);
+
   const novoCarrinho = [];
   const [newCart, setNewCart] = useState([]);
   const [token, setToken] = useState();
   const [OptionPayment, setOptionPayment] = useState("unselected");
-  const [cartNovo, setCartNovo] = useState([]);
 
   const history = useHistory();
   const cartLocal = JSON.parse(window.localStorage.getItem("cart"));
@@ -126,9 +131,10 @@ const Cart = () => {
       products,
       paymentMethod: OptionPayment,
     };
+    const id = restaurantInfo.id;
     axios
       .post(
-        "https://us-central1-missao-newton.cloudfunctions.net/rappi4B/restaurants/1/order",
+        `https://us-central1-missao-newton.cloudfunctions.net/rappi4B/restaurants/${id}/order`,
         body,
         headers
       )
@@ -153,6 +159,8 @@ const Cart = () => {
     localStorage.setItem("cart", JSON.stringify(newCart));
   };
 
+  console.log(cart);
+
   const handleRadio = (event) => {
     setOptionPayment(event.target.value);
   };
@@ -164,7 +172,7 @@ const Cart = () => {
 
   let total = 0;
   console.log("cartLocal", cartLocal);
-  console.log("cartNovo", cartNovo);
+
   cart.forEach((produto) => {
     const verificaProduto = novoCarrinho.findIndex(
       (prod) => prod.id === produto.id
@@ -173,16 +181,16 @@ const Cart = () => {
       const novoProduto = {
         id: produto.id,
         nome: produto.name,
-        quantidade: quantidade,
+        quantidade: produto.quantity,
         preco: produto.price,
         descricao: produto.description,
         foto: produto.photoUrl,
       };
       novoCarrinho.push(novoProduto);
     } else {
-      novoCarrinho[verificaProduto].quantidade += quantidade;
+      novoCarrinho[verificaProduto].quantidade += produto.quantity;
     }
-    total = produto.price * quantidade + total;
+    total = produto.price * produto.quantity + total;
   });
 
   console.log(novoCarrinho);
@@ -193,8 +201,13 @@ const Cart = () => {
       <ProductImg src={product.foto} />
       <ProductDetails>
         {/* <StyleQuantity2>{product.quantidade}</StyleQuantity2> */}
+        <StyleQuantity3>
+          <ProductName>{product.nome}</ProductName>
+          <StyleQuantity>
+            <StyleQuantity2>{product.quantidade}</StyleQuantity2>
+          </StyleQuantity>
+        </StyleQuantity3>
 
-        <ProductName>{product.nome}</ProductName>
         <ProductText> {product.descricao}</ProductText>
         <Price>R${product.preco.toFixed(2)}</Price>
       </ProductDetails>
@@ -209,11 +222,7 @@ const Cart = () => {
   const totalFrete = total + restaurantDetail.shipping;
 
   const funcaoBotao = () => {
-    if (novoCarrinho.length !== 0 && OptionPayment !== "unselected") {
-      placeOrder();
-    } else {
-      alert("Seleciona Opção");
-    }
+    alert("Seleciona opção de compra e preencha o carrinho");
   };
 
   const goToBack = () => {
@@ -230,16 +239,22 @@ const Cart = () => {
 
   if (token) {
     return (
-      <Estilo02>
+      <CartContainer>
         <div>
           <Header>
             <img src={Back} onClick={goToBack} />
             <TittlePage>Meu Carrinho</TittlePage>
           </Header>
-          <div>Endereço de entrega: {profile.address}</div>
-
+          <RectangleAddress>
+            <MainText style={{ marginLeft: "16px" }}>
+              Endereço de entrega
+            </MainText>
+            <SecondaryText style={{ marginLeft: "16px" }}>
+              {profile.address}
+            </SecondaryText>
+          </RectangleAddress>
           {novoCarrinho.length === 0 ? (
-            <div>Carrinho Vazio</div>
+            <div style={{ textAlign: "center" }}>Carrinho Vazio</div>
           ) : (
             <div>
               <DetailsContainer>
@@ -253,18 +268,23 @@ const Cart = () => {
             </div>
           )}
           <div>
-            <MainText>Frete: R$ {restaurantDetail.shipping},00</MainText>
-            <MainText>SUBTOTAL: R${total.toFixed(2)}</MainText>
-            <MainText>TOTAL: R${totalFrete.toFixed(2)}</MainText>
+            <MainText style={{ marginLeft: "16px" }}>
+              Frete: R$ {restaurantDetail.shipping},00
+            </MainText>
+            <CardPrice style={{ marginLeft: "16px" }}>
+              <TotalText>Total:</TotalText>
+              <TotalPrice>R${totalFrete.toFixed(2)}</TotalPrice>
+            </CardPrice>
             <div></div>
             <div>
-              <div>Forma de pagamento</div>
+              <div style={{ marginLeft: "16px" }}>Forma de pagamento</div>
               <hr></hr>
               <input
                 type="radio"
                 name="opcao"
                 value="money"
                 onChange={handleRadio}
+                style={{ marginLeft: "16px" }}
               ></input>
               <span>Dinheiro</span>
               <input
@@ -272,14 +292,23 @@ const Cart = () => {
                 name="opcao"
                 value="creditcard"
                 onChange={handleRadio}
+                style={{ marginLeft: "16px" }}
               ></input>
               <span>Cartão de Crédito</span>
             </div>
           </div>
-          <button onClick={funcaoBotao}>CONFIRMAR</button>
+          {novoCarrinho.length !== 0 && OptionPayment !== "unselected" ? (
+            <Rectangle>
+              <Button onClick={placeOrder}>Confirmar</Button>
+            </Rectangle>
+          ) : (
+            <RectangleDisabled>
+              <Button onClick={funcaoBotao}>Confirmar</Button>
+            </RectangleDisabled>
+          )}
         </div>
         <NavBar />
-      </Estilo02>
+      </CartContainer>
     );
   } else {
     return <div>Acesso Negado</div>;

@@ -32,6 +32,7 @@ const HomePage = () => {
   const [filter, setFilter] = useState(false);
   const [restaurants, setRestaurants] = useState([]);
   const [category, setCategory] = useState("");
+
   const [token, setToken] = useState(null);
 
   useEffect(() => {
@@ -43,6 +44,7 @@ const HomePage = () => {
       getRestaurants();
     }
   }, [token]);
+
 
   const setFilterTrue = () => {
     setFilter(true);
@@ -76,8 +78,10 @@ const HomePage = () => {
     filteredList = filteredList.filter((restaurant) => {
       return restaurant.category === category;
     });
+
   }
   const history = useHistory();
+  
   const goToCart = () => {
     history.push("./cart");
   };
@@ -85,6 +89,7 @@ const HomePage = () => {
   const goToProfile = () => {
     history.push("./profile");
   };
+
 
   return (
     <Feed>

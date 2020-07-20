@@ -126,20 +126,4 @@ const LoginPage = () => {
 
 export default LoginPage;
 
-/*
-import SplashScreen from "../SplashScreen/";
-const [isLoading, setIsLoading] = useState(true);
 
-const showSplashScreen = () => {
-    setTimeout(()=> {
-      setIsLoading(false)
-    }, 5000)
-  }
-
-useEffect(() => {
-    showSplashScreen();
-  });
-
-{isLoading === true && <SplashScreen/>}
-
-}*/

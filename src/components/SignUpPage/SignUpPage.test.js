@@ -1,11 +1,37 @@
 import React from "react";
 import { render, wait} from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import LoginPage from './index'
+import SignUpPage from './index'
 import axios from "axios";
 import userEvent from "@testing-library/user-event";
 
+describe ("signup page", ()=> {
 
+    test("Name input shows on renderization", () => {
+    const { getByPlaceholderText } = render(<SignUpPage />);
+    const name = getByPlaceholderText(/Nome e sobrenome/);
+    expect(name).toBeInTheDocument()
+    });
+
+    test("Email input shows on renderization", () => {
+    const { getByPlaceholderText } = render(<SignUpPage />);
+    const email = getByPlaceholderText(/email@email.com/);
+    expect(email).toBeInTheDocument()
+    });
+
+    test("Cpf input shows on renderization", () => {
+    const { getByPlaceholderText } = render(<SignUpPage />);
+    const cpf = getByPlaceholderText(/000.000.000-00/);
+    expect(cpf).toBeInTheDocument()
+    });
+    
+    test("Input password shows on renderization", () => {
+    const { getByPlaceholderText } = render(<SignUpPage />);
+    const password = getByPlaceholderText(/Minimo 6 caracteres/);
+    expect(password).toBeInTheDocument()
+    });
+    
+    })
 
 describe('Testar se o cadastro é efetuado', () => {
     test ('Faz cadastro', async () => {
@@ -21,7 +47,7 @@ describe('Testar se o cadastro é efetuado', () => {
         const {
          getByPlaceholderText,
          getByText
-        } = render(<LoginPage />)
+        } = render(<SignUpPage />)
 
         const inputname = getByPlaceholderText("Nome e sobrenome");
         const inputemail = getByPlaceholderText("email@email.com");

@@ -1,12 +1,13 @@
 import styled from "styled-components";
 
-export const RestaurantContainer = styled.div`
+export const CartContainer = styled.div`
   width: 360px;
-  height: 640px;
+
   font-family: Roboto;
   /* background-color: pink; */
   display: flex;
   flex-direction: column;
+  margin-bottom: 130px;
 `;
 
 export const Header = styled.div`
@@ -38,7 +39,7 @@ export const TittlePage = styled.p`
 
 export const DetailsContainer = styled.div`
   width: 328px;
-  height: 180px;
+  height: 130px;
   display: flex;
   flex-direction: column;
   /* flex-wrap: wrap; */
@@ -79,7 +80,7 @@ export const CategoryTitle = styled.h5`
 ////////PRODUCTS
 export const ProductCard = styled.div`
   width: 328px;
-  height: 112px;
+
   border-radius: 8px;
   border: solid 1px #b8b8b8;
   margin-bottom: 8px;
@@ -175,6 +176,9 @@ export const StyleQuantity = styled.p`
   height: 33px;
   border-radius: 8px;
   border: solid 1px #e86e5a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const StyleQuantity2 = styled.p`
@@ -191,6 +195,12 @@ export const StyleQuantity2 = styled.p`
   color: #e86e5a;
 `;
 
+export const StyleQuantity3 = styled.p`
+  display: flex;
+  align-items: flex-end;
+  margin-top: 0;
+`;
+
 export const StyleCircular = styled.div`
   display: flex;
   align-items: center;
@@ -198,5 +208,95 @@ export const StyleCircular = styled.div`
   height: 500px;
 `;
 
-// justifyContent: "center",
-//             alignItems: "center",
+//Button Cart
+export const Rectangle = styled.div`
+  width: 328px;
+  height: 42px;
+  border-radius: 2px;
+  background-color: #e86e5a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 16px;
+  margin-top: 40px;
+`;
+
+export const RectangleDisabled = styled.div`
+  width: 328px;
+  height: 42px;
+  border-radius: 2px;
+  background-color: rgba(232, 110, 90, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 16px;
+  margin-top: 40px;
+`;
+
+export const Button = styled.p`
+  width: 296px;
+  height: 18px;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.39px;
+  text-align: center;
+  color: var(--black);
+`;
+
+// Cart Price
+export const CardPrice = styled.div`
+  display: flex;
+  align-items: flex-end;
+`;
+
+export const TotalText = styled.p`
+  width: 164px;
+  height: 18px;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.39px;
+  color: var(--black);
+`;
+
+export const TotalPrice = styled.p`
+  width: 164px;
+  height: 21px;
+  font-family: Roboto;
+  font-size: 18px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.43px;
+  text-align: right;
+  color: #e86e5a;
+`;
+
+//Card Address
+
+export const RectangleAddress = styled.div`
+  width: 360px;
+  height: 76px;
+  background-color: #eeeeee;
+`;
+
+export const SecondaryText = styled.div`
+  width: 328px;
+  height: 18px;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: -0.39px;
+  color: var(--black);
+`;

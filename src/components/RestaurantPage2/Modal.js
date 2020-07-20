@@ -6,7 +6,7 @@ import {
   ModalSelect,
   SelectWrapper,
   ModalTitle,
-} from "./modalStyle"
+} from "./modalStyle";
 
 import Modal from "@material-ui/core/Modal";
 

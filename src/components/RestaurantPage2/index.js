@@ -105,6 +105,7 @@ function RestaurantPage2() {
 
     setCart(newCart);
     setModal(false);
+    setQuantity(1);
   };
 
   const productsRender =

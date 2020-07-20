@@ -126,6 +126,7 @@ const Cart = () => {
     const products = newCart.map((product) => {
       return { id: product.id, quantity: product.quantidade };
     });
+    console.log("produtos", products);
 
     const body = {
       products,
@@ -181,20 +182,17 @@ const Cart = () => {
       const novoProduto = {
         id: produto.id,
         nome: produto.name,
-        quantidade: produto.quantity,
+        quantidade: Number(produto.quantity),
         preco: produto.price,
         descricao: produto.description,
         foto: produto.photoUrl,
       };
       novoCarrinho.push(novoProduto);
     } else {
-      novoCarrinho[verificaProduto].quantidade += produto.quantity;
+      novoCarrinho[verificaProduto].quantidade += Number(produto.quantity);
     }
     total = produto.price * produto.quantity + total;
   });
-
-  console.log(novoCarrinho);
-  console.log(novoCarrinho.length);
 
   const carrinhoRenderizado = novoCarrinho.map((product) => (
     <ProductCard>
